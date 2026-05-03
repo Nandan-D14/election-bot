@@ -1,7 +1,8 @@
 'use client';
 
+import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Text, RoundedBox, ContactShadows, Float, Html } from '@react-three/drei';
+import { OrbitControls, RoundedBox, ContactShadows, Float, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { SIMULATED_CANDIDATES } from '@/constants/evm';
 import type { EvmStep } from '@/types';
@@ -58,9 +59,11 @@ function ControlUnit({ currentStep, onAdvanceStep }: { currentStep: EvmStep, onA
         <meshStandardMaterial color={isOff ? '#111' : '#a1e4a1'} />
       </mesh>
       {!isOff && (
-        <Text position={[0, 0.61, -1]} rotation={[-Math.PI / 2, 0, 0]} fontSize={0.2} color="black">
-          {currentStep === 'confirmation' ? 'VOTE RECORDED' : 'READY'}
-        </Text>
+        <Html position={[0, 0.61, -1]} rotation={[-Math.PI / 2, 0, 0]} center transform>
+          <div style={{ color: 'black', fontWeight: 'bold', fontSize: '10px', whiteSpace: 'nowrap', userSelect: 'none' }}>
+            {currentStep === 'confirmation' ? 'VOTE RECORDED' : 'READY'}
+          </div>
+        </Html>
       )}
 
       {/* Power Button */}
@@ -76,9 +79,9 @@ function ControlUnit({ currentStep, onAdvanceStep }: { currentStep: EvmStep, onA
           <cylinderGeometry args={[0.3, 0.3, 0.2, 32]} />
           <meshStandardMaterial color={isOff ? '#cc0000' : '#00cc00'} />
         </mesh>
-        <Text position={[0, 0.15, 0]} rotation={[-Math.PI / 2, 0, 0]} fontSize={0.12} color="white">
-          POWER
-        </Text>
+        <Html position={[0, 0.15, 0]} rotation={[-Math.PI / 2, 0, 0]} center transform>
+          <div style={{ color: 'white', fontSize: '6px', fontWeight: 'bold', userSelect: 'none' }}>POWER</div>
+        </Html>
       </group>
 
       {/* Status LEDs */}
@@ -90,8 +93,12 @@ function ControlUnit({ currentStep, onAdvanceStep }: { currentStep: EvmStep, onA
         <cylinderGeometry args={[0.1, 0.1, 0.1, 16]} />
         <meshStandardMaterial color={currentStep === 'ballot_selection' ? '#ffaa00' : '#222'} emissive={currentStep === 'ballot_selection' ? '#ffaa00' : '#000'} emissiveIntensity={0.5} />
       </mesh>
-      <Text position={[-1, 0.52, 0.8]} rotation={[-Math.PI / 2, 0, 0]} fontSize={0.1} color="black">ON</Text>
-      <Text position={[1, 0.52, 0.8]} rotation={[-Math.PI / 2, 0, 0]} fontSize={0.1} color="black">BUSY</Text>
+      <Html position={[-1, 0.52, 0.8]} rotation={[-Math.PI / 2, 0, 0]} center transform>
+        <div style={{ color: 'black', fontSize: '5px', userSelect: 'none' }}>ON</div>
+      </Html>
+      <Html position={[1, 0.52, 0.8]} rotation={[-Math.PI / 2, 0, 0]} center transform>
+        <div style={{ color: 'black', fontSize: '5px', userSelect: 'none' }}>BUSY</div>
+      </Html>
     </group>
   );
 }
@@ -217,34 +224,36 @@ export default function EVM3DModel({ currentStep, selectedCandidate, vvpatVisibl
   return (
     <div style={{ width: '100%', height: '100%', minHeight: '400px' }}>
       <Canvas camera={{ position: [0, 6, 8], fov: 45 }}>
-        <color attach="background" args={['#0a0a1a']} />
-        {/* We make background transparent via CSS if we want, but explicit color helps 3D rendering */}
-        <ambientLight intensity={1.5} />
-        <directionalLight position={[10, 10, 5]} intensity={2} castShadow />
-        <pointLight position={[-10, 5, -10]} intensity={1} />
-        
-        {/* Removed Environment preset="city" to avoid external fetch errors */}
+        <Suspense fallback={<Html center><div style={{ color: 'white' }}>Loading 3D Scene...</div></Html>}>
+          <color attach="background" args={['#0a0a1a']} />
+          {/* We make background transparent via CSS if we want, but explicit color helps 3D rendering */}
+          <ambientLight intensity={1.5} />
+          <directionalLight position={[10, 10, 5]} intensity={2} castShadow />
+          <pointLight position={[-10, 5, -10]} intensity={1} />
+          
+          {/* Removed Environment preset="city" to avoid external fetch errors */}
 
-        <Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.2}>
-          <group position={[0, -0.5, 0]}>
-            <ControlUnit currentStep={currentStep} onAdvanceStep={onAdvanceStep} />
-            <BallotUnit currentStep={currentStep} selectedCandidate={selectedCandidate} onCandidateSelect={onCandidateSelect} onAdvanceStep={onAdvanceStep} />
-            <VvpatUnit vvpatVisible={vvpatVisible} selectedCandidate={selectedCandidate} />
+          <Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.2}>
+            <group position={[0, -0.5, 0]}>
+              <ControlUnit currentStep={currentStep} onAdvanceStep={onAdvanceStep} />
+              <BallotUnit currentStep={currentStep} selectedCandidate={selectedCandidate} onCandidateSelect={onCandidateSelect} onAdvanceStep={onAdvanceStep} />
+              <VvpatUnit vvpatVisible={vvpatVisible} selectedCandidate={selectedCandidate} />
 
-            {/* Cables */}
-            <mesh position={[-1.8, 0.2, -1]}>
-               <tubeGeometry args={[new THREE.CatmullRomCurve3([new THREE.Vector3(0,0,0), new THREE.Vector3(-1.7, -0.2, 1)]), 20, 0.05, 8, false]} />
-               <meshStandardMaterial color="#222" />
-            </mesh>
-            <mesh position={[1.8, 0.2, -1]}>
-               <tubeGeometry args={[new THREE.CatmullRomCurve3([new THREE.Vector3(0,0,0), new THREE.Vector3(1.7, 0, 0.5)]), 20, 0.05, 8, false]} />
-               <meshStandardMaterial color="#222" />
-            </mesh>
-          </group>
-        </Float>
+              {/* Cables */}
+              <mesh position={[-1.8, 0.2, -1]}>
+                 <tubeGeometry args={[new THREE.CatmullRomCurve3([new THREE.Vector3(0,0,0), new THREE.Vector3(-1.7, -0.2, 1)]), 20, 0.05, 8, false]} />
+                 <meshStandardMaterial color="#222" />
+              </mesh>
+              <mesh position={[1.8, 0.2, -1]}>
+                 <tubeGeometry args={[new THREE.CatmullRomCurve3([new THREE.Vector3(0,0,0), new THREE.Vector3(1.7, 0, 0.5)]), 20, 0.05, 8, false]} />
+                 <meshStandardMaterial color="#222" />
+              </mesh>
+            </group>
+          </Float>
 
-        <ContactShadows position={[0, -1, 0]} opacity={0.5} scale={15} blur={1.5} far={4.5} />
-        <OrbitControls makeDefault minPolarAngle={Math.PI / 4} maxPolarAngle={Math.PI / 2.2} enableZoom={true} minDistance={4} maxDistance={15} />
+          <ContactShadows position={[0, -1, 0]} opacity={0.5} scale={15} blur={1.5} far={4.5} />
+          <OrbitControls makeDefault minPolarAngle={Math.PI / 4} maxPolarAngle={Math.PI / 2.2} enableZoom={true} minDistance={4} maxDistance={15} />
+        </Suspense>
       </Canvas>
     </div>
   );
