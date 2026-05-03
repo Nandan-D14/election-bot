@@ -1,7 +1,7 @@
 'use client';
 
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Text, RoundedBox, Environment, ContactShadows, Float, Html } from '@react-three/drei';
+import { OrbitControls, Text, RoundedBox, ContactShadows, Float, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { SIMULATED_CANDIDATES } from '@/constants/evm';
 import type { EvmStep } from '@/types';
@@ -219,11 +219,11 @@ export default function EVM3DModel({ currentStep, selectedCandidate, vvpatVisibl
       <Canvas camera={{ position: [0, 6, 8], fov: 45 }}>
         <color attach="background" args={['#0a0a1a']} />
         {/* We make background transparent via CSS if we want, but explicit color helps 3D rendering */}
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
-        <pointLight position={[-10, 5, -10]} intensity={0.5} />
+        <ambientLight intensity={1.5} />
+        <directionalLight position={[10, 10, 5]} intensity={2} castShadow />
+        <pointLight position={[-10, 5, -10]} intensity={1} />
         
-        <Environment preset="city" />
+        {/* Removed Environment preset="city" to avoid external fetch errors */}
 
         <Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.2}>
           <group position={[0, -0.5, 0]}>
