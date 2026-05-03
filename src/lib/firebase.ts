@@ -1,7 +1,7 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAnalytics } from 'firebase/analytics';
+import { getAnalytics, isSupported } from 'firebase/analytics';
 
-// Firebase configuration - uses environment variables with fallback values
+// Firebase configuration - uses environment variables
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -11,13 +11,46 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
-// Initialize Firebase
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+// Check if all required config values are present and valid (not empty strings or "undefined" strings)
+const isConfigValid = !!(
+  firebaseConfig.apiKey && firebaseConfig.apiKey !== 'undefined' &&
+  firebaseConfig.projectId && firebaseConfig.projectId !== 'undefined' &&
+  firebaseConfig.appId && firebaseConfig.appId !== 'undefined'
+);
 
-// Initialize Analytics (only in browser)
+// Initialize Firebase
+let app: ReturnType<typeof initializeApp> | null = null;
+if (isConfigValid) {
+  try {
+    app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+  } catch (error) {
+    console.error("Firebase initialization error:", error);
+  }
+} else {
+  // Only warn in development to avoid cluttering production logs, 
+  // but this is likely why features are failing if env vars aren't set.
+  if (process.env.NODE_ENV === 'development') {
+    console.warn("Firebase configuration is missing or incomplete. Check your .env.local file.");
+  }
+}
+
+// Initialize Analytics (only in browser and if app is valid and supported)
 let analytics: ReturnType<typeof getAnalytics> | null = null;
-if (typeof window !== 'undefined') {
-  analytics = getAnalytics(app);
+
+if (typeof window !== 'undefined' && app) {
+  const currentApp = app;
+  // isSupported() checks if the browser environment allows Analytics (e.g. IndexedDB availability)
+  isSupported().then(supported => {
+    if (supported) {
+      try {
+        analytics = getAnalytics(currentApp);
+      } catch (error) {
+        console.warn("Firebase Analytics initialization failed:", error);
+      }
+    }
+  }).catch(err => {
+    console.warn("Error checking Firebase Analytics support:", err);
+  });
 }
 
 export { app, analytics };
