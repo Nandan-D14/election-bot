@@ -37,9 +37,7 @@ export async function POST(req: Request) {
 
     const chat = model.startChat({
       history,
-      systemInstruction: {
-        parts: [{ text: 'You are a helpful, knowledgeable, and neutral Electoral Process Assistant. Explain the election lifecycle, voter eligibility, and polling procedures accurately and neutrally. Respond in the language of the user.' }],
-      },
+      systemInstruction: 'You are a helpful, knowledgeable, and neutral Electoral Process Assistant. Explain the election lifecycle, voter eligibility, and polling procedures accurately and neutrally. Respond in the language of the user.',
     });
 
     const result = await chat.sendMessageStream(latestMessage.content);
