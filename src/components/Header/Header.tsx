@@ -9,12 +9,14 @@ import type { AudioState, LanguageTag } from '@/types';
 import LanguageSelector from '@/components/LanguageSelector/LanguageSelector';
 import styles from './Header.module.css';
 
-type NavView = 'assistant' | 'simulator' | 'quiz' | 'myths' | 'chatbot' | 'rules' | 'games' | 'processmap' | 'mindmap';
+type NavView = 'assistant' | 'simulator' | 'quiz' | 'myths' | 'chatbot' | 'rules' | 'games' | 'processmap' | 'mindmap' | 'verifyid' | 'profile';
 
 interface HeaderProps {
   audioState: AudioState;
   language: LanguageTag;
   onLanguageChange: (tag: LanguageTag) => void;
+  totalPoints?: number;
+  onProfileClick?: () => void;
   nav?: {
     activeView: NavView;
     onHome: () => void;
@@ -29,7 +31,7 @@ const STATE_LABELS: Record<AudioState, string> = {
   speaking: 'Speaking...',
 };
 
-export default function Header({ audioState, language, onLanguageChange, nav }: HeaderProps) {
+export default function Header({ audioState, language, onLanguageChange, totalPoints, onProfileClick, nav }: HeaderProps) {
   return (
     <header className={styles.header} role="banner">
       <div className={styles.topRow}>
@@ -51,6 +53,19 @@ export default function Header({ audioState, language, onLanguageChange, nav }: 
         </div>
 
         <div className={styles.right}>
+          {/* Score Badge */}
+          {totalPoints !== undefined && (
+            <button
+              className={styles.scoreBadge}
+              onClick={onProfileClick}
+              aria-label={`Your score: ${totalPoints} points. Click to view profile.`}
+              title="View Profile"
+            >
+              <span className={styles.scoreIcon}>⭐</span>
+              <span className={styles.scoreNumber}>{totalPoints}</span>
+              <span className={styles.scorePts}>pts</span>
+            </button>
+          )}
           <LanguageSelector value={language} onChange={onLanguageChange} />
         </div>
       </div>
@@ -114,6 +129,13 @@ export default function Header({ audioState, language, onLanguageChange, nav }: 
                 📜 Rules
               </button>
               <button
+                className={`${styles.tab} ${nav.activeView === 'verifyid' ? styles.tabActive : ''}`}
+                onClick={() => nav.onSelect('verifyid')}
+                id="tab-verifyid"
+              >
+                🪪 Verify ID
+              </button>
+              <button
                 className={`${styles.tab} ${nav.activeView === 'games' ? styles.tabActive : ''}`}
                 onClick={() => nav.onSelect('games')}
                 id="tab-games"
@@ -133,6 +155,13 @@ export default function Header({ audioState, language, onLanguageChange, nav }: 
                 id="tab-mindmap"
               >
                 🧠 MindMap
+              </button>
+              <button
+                className={`${styles.tab} ${nav.activeView === 'profile' ? styles.tabActive : ''}`}
+                onClick={() => nav.onSelect('profile')}
+                id="tab-profile"
+              >
+                👤 Profile
               </button>
             </div>
           </nav>

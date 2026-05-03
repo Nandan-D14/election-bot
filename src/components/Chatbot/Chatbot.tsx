@@ -44,15 +44,7 @@ export default function Chatbot() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const generateResponse = (): string => {
-    const responses = [
-      "I'd be happy to help with that! Let me break this down for you...",
-      "Great question! Here's what you need to know...",
-      "I understand what you're looking for. Here's my take...",
-      "That's an interesting topic! Let me provide some insights...",
-    ];
-    return responses[Math.floor(Math.random() * responses.length)];
-  };
+
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -77,22 +69,73 @@ export default function Chatbot() {
       timestamp: new Date(),
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    const currentMessages = [...messages, userMessage];
+    setMessages(currentMessages);
     setInputValue('');
     setIsLoading(true);
 
-    // Simulate AI response
-    setTimeout(() => {
-      const assistantMessage: Message = {
-        id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        role: 'assistant',
-        content: generateResponse(),
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, assistantMessage]);
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: currentMessages,
+          model: selectedModel.id,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+
+      // Add an empty assistant message to stream into
+      const assistantMessageId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: assistantMessageId,
+          role: 'assistant',
+          content: '',
+          timestamp: new Date(),
+        },
+      ]);
+      
+      setIsLoading(false); // Typing indicator off, streaming starts
+
+      if (response.body) {
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let done = false;
+
+        while (!done) {
+          const { value, done: readerDone } = await reader.read();
+          done = readerDone;
+          if (value) {
+            const chunk = decoder.decode(value, { stream: true });
+            setMessages((prev) =>
+              prev.map((msg) =>
+                msg.id === assistantMessageId
+                  ? { ...msg, content: msg.content + chunk }
+                  : msg
+              )
+            );
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching chat response:', error);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          role: 'assistant',
+          content: "Sorry, I'm having trouble connecting to my servers right now. Please try again later.",
+          timestamp: new Date(),
+        },
+      ]);
       setIsLoading(false);
-    }, 1500);
-  }, [inputValue, isLoading]);
+    }
+  }, [inputValue, isLoading, messages, selectedModel.id]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {

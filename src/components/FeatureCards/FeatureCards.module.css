@@ -190,6 +190,32 @@
   box-shadow: var(--shadow-md);
 }
 
+.verifyIdButton {
+  background: var(--color-accent-orange);
+  border-color: var(--color-accent-orange);
+  color: var(--color-text-inverse);
+  font-weight: 600;
+}
+
+.verifyIdButton:hover {
+  background: #9c4221;
+  border-color: #9c4221;
+  box-shadow: var(--shadow-md);
+}
+
+.profileButton {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-weight: 600;
+}
+
+.profileButton:hover {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+  box-shadow: var(--shadow-md);
+}
+
 /* Feature Grid */
 .grid {
   display: grid;

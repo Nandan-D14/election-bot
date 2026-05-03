@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import FirebaseAnalytics from '@/components/FirebaseAnalytics/FirebaseAnalytics';
+import ErrorBoundary from '@/components/ErrorBoundary/ErrorBoundary';
 
 export const metadata: Metadata = {
   title: 'CivicIQ — Multilingual Electoral Education Assistant',
@@ -24,10 +26,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {/* Professional clean background */}
-        <div className="professional-bg" aria-hidden="true" />
+        {/* Firebase Analytics */}
+        <FirebaseAnalytics />
 
-        {children}
+        {/* Error Boundary */}
+        <ErrorBoundary>
+          {/* Professional clean background */}
+          <div className="professional-bg" aria-hidden="true" />
+
+          {children}
+        </ErrorBoundary>
       </body>
     </html>
   );

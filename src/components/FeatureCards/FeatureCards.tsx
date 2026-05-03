@@ -30,11 +30,11 @@ const FEATURES: Feature[] = [
     accentColor: 'rgba(34, 211, 238, 0.15)',
   },
   {
-    icon: '🌐',
-    title: '22 Indian Languages',
+    icon: '🪪',
+    title: 'AI ID Verification',
     description:
-      'Full support for all 22 scheduled Indian languages. Ask in Hindi, Tamil, Bengali, or any other language.',
-    accentColor: 'rgba(167, 139, 250, 0.15)',
+      'Upload your Voter ID card and let our AI verify its authenticity, extract details, and check for issues.',
+    accentColor: 'rgba(251, 191, 36, 0.15)',
   },
   {
     icon: '🔒',
@@ -55,6 +55,8 @@ interface FeatureCardsProps {
   onStartGames?: () => void;
   onStartProcessMap?: () => void;
   onStartMindMap?: () => void;
+  onStartVerifyId?: () => void;
+  onStartProfile?: () => void;
 }
 
 export default function FeatureCards({
@@ -66,7 +68,9 @@ export default function FeatureCards({
   onStartRules,
   onStartGames,
   onStartProcessMap,
-  onStartMindMap
+  onStartMindMap,
+  onStartVerifyId,
+  onStartProfile,
 }: FeatureCardsProps) {
   return (
     <section className={styles.section} aria-label="Features">
@@ -110,6 +114,9 @@ export default function FeatureCards({
           <button className={styles.heroTertiary} onClick={onStartRules}>
             📜 Voting Rules
           </button>
+          <button className={`${styles.heroTertiary} ${styles.verifyIdButton}`} onClick={onStartVerifyId}>
+            🪪 Verify ID
+          </button>
           <button className={`${styles.heroTertiary} ${styles.highlightButton}`} onClick={onStartGames}>
             🎮 Fun Games
           </button>
@@ -118,6 +125,9 @@ export default function FeatureCards({
           </button>
           <button className={`${styles.heroTertiary} ${styles.mindMapButton}`} onClick={onStartMindMap}>
             🧠 Mind Map
+          </button>
+          <button className={`${styles.heroTertiary} ${styles.profileButton}`} onClick={onStartProfile}>
+            👤 My Profile
           </button>
         </div>
       </div>
