@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  PROJECT_ID: vivek-tourism-rpoejct
   REGION: us-central1
   SERVICE_NAME: election-bot-frontend
   ARTIFACT_REPOSITORY: election-bot-repo
