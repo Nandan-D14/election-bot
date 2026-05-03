@@ -5,7 +5,7 @@ test("chatbot view renders correctly", async ({ page }) => {
   await page.locator("#start-chatbot-button").click();
 
   // Check if chatbot view is visible
-  await expect(page.locator(".chatbotView")).toBeVisible();
+  await expect(page.locator('[data-testid="chatbot-view"]')).toBeVisible();
 });
 
 test("chatbot input field is present", async ({ page }) => {
@@ -13,7 +13,7 @@ test("chatbot input field is present", async ({ page }) => {
   await page.locator("#start-chatbot-button").click();
 
   // Wait for chatbot to load
-  await page.waitForSelector(".chatbotView", { state: "visible" });
+  await page.waitForSelector('[data-testid="chatbot-view"]', { state: "visible" });
 
   // Check for input field
   const inputField = page.locator('input[type="text"], textarea');
@@ -25,7 +25,7 @@ test("chatbot can send messages", async ({ page }) => {
   await page.locator("#start-chatbot-button").click();
 
   // Wait for chatbot to load
-  await page.waitForSelector(".chatbotView", { state: "visible" });
+  await page.waitForSelector('[data-testid="chatbot-view"]', { state: "visible" });
 
   // Type a message
   const inputField = page.locator('input[type="text"], textarea').first();

@@ -3,57 +3,61 @@
    Clean, accessible, and authoritative styling
    ============================================================ */
 
-/* ---------- Google Fonts ---------- */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:wght@400;700&display=swap");
+/* Google Fonts loaded via next/font/google in layout.tsx — no render-blocking @import */
 
 /* ---------- CSS Custom Properties ---------- */
 :root {
-  /* --- Colors — Professional Government Palette --- */
-  --color-bg-primary: #ffffff;
-  --color-bg-secondary: #f8f9fa;
-  --color-bg-tertiary: #e9ecef;
-  --color-surface: #ffffff;
-  --color-surface-hover: #f1f3f5;
+  /* --- Colors — Premium Liquid Glass Palette --- */
+  --color-bg-primary: #050b18;
+  --color-bg-secondary: #0a1428;
+  --color-bg-tertiary: #101d3a;
+  --color-surface: rgba(255, 255, 255, 0.05);
+  --color-surface-hover: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --glass-blur: blur(12px);
 
-  /* Official Government Blues */
-  --color-primary: #1a365d;
-  --color-primary-dark: #0f2744;
-  --color-primary-light: #2c5282;
-  --color-secondary: #c53030;
-  --color-secondary-light: #e53e3e;
+  /* High Saturation Gradients */
+  --grad-primary: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --grad-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --grad-mesh: radial-gradient(at 0% 0%, hsla(220,100%,10%,1) 0, transparent 50%), 
+               radial-gradient(at 50% 0%, hsla(230,100%,15%,1) 0, transparent 50%), 
+               radial-gradient(at 100% 0%, hsla(240,100%,20%,1) 0, transparent 50%),
+               radial-gradient(at 0% 100%, hsla(250,100%,15%,1) 0, transparent 50%),
+               radial-gradient(at 50% 100%, hsla(260,100%,10%,1) 0, transparent 50%),
+               radial-gradient(at 100% 100%, hsla(270,100%,20%,1) 0, transparent 50%);
 
-  /* Accent Colors */
-  --color-accent-1: #2b6cb0;
-  --color-accent-2: #3182ce;
-  --color-accent-3: #4299e1;
-  --color-accent-green: #276749;
-  --color-accent-orange: #c05621;
-  --color-accent-purple: #553c9a;
+  /* Official Government Blues (Adapted for Dark Mode) */
+  --color-primary: #4facfe;
+  --color-primary-dark: #00f2fe;
+  --color-primary-light: #70c1ff;
+  --color-secondary: #f5576c;
+  --color-secondary-light: #f093fb;
 
   /* Text Colors */
-  --color-text-primary: #1a202c;
-  --color-text-secondary: #4a5568;
-  --color-text-muted: #718096;
-  --color-text-inverse: #ffffff;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.75); /* Increased from 0.7 */
+  --color-text-muted: rgba(255, 255, 255, 0.55); /* Increased from 0.45 to safely pass 4.5:1 */
+  --color-text-inverse: #050b18;
 
   /* Border & Divider */
-  --color-border: #e2e8f0;
-  --color-border-light: #edf2f7;
-  --color-border-dark: #cbd5e0;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-light: rgba(255, 255, 255, 0.05);
+  --color-border-dark: rgba(255, 255, 255, 0.2);
 
   /* Status Colors */
-  --color-success: #276749;
-  --color-success-bg: #c6f6d5;
-  --color-warning: #975a16;
-  --color-warning-bg: #fefcbf;
-  --color-error: #c53030;
-  --color-error-bg: #fed7d7;
-  --color-info: #2b6cb0;
-  --color-info-bg: #bee3f8;
+  --color-success: #00e676;
+  --color-success-bg: rgba(0, 230, 118, 0.1);
+  --color-warning: #ffea00;
+  --color-warning-bg: rgba(255, 234, 0, 0.1);
+  --color-error: #ff5252;
+  --color-error-bg: rgba(255, 82, 82, 0.1);
+  --color-info: #2196f3;
+  --color-info-bg: rgba(33, 150, 243, 0.1);
 
   /* --- Typography --- */
-  --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-heading: "Merriweather", Georgia, serif;
+  --font-primary: var(--font-inter, "Inter"), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-heading: var(--font-merriweather, "Merriweather"), Georgia, serif;
   --font-mono: "SF Mono", Consolas, monospace;
 
   --text-xs: 0.75rem;
@@ -78,28 +82,26 @@
   --space-10: 2.5rem;
   --space-12: 3rem;
   --space-16: 4rem;
-  --space-20: 5rem;
-  --space-24: 6rem;
 
-  /* --- Radii --- */
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-xl: 12px;
-  --radius-2xl: 16px;
+  /* --- Radii — Apple Native Style --- */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
   --radius-full: 9999px;
 
-  /* --- Shadows — Professional Subtle --- */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  /* --- Shadows — High Depth --- */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 35px 60px -15px rgba(0, 0, 0, 0.5);
 
   /* --- Transitions --- */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* --- Z-Index --- */
   --z-base: 1;
@@ -108,6 +110,26 @@
   --z-overlay: 30;
   --z-modal: 40;
   --z-toast: 50;
+}
+
+/* --- Accessibility: Skip to Content --- */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  padding: var(--space-2) var(--space-4);
+  z-index: 1000;
+  transition: top 0.3s;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 0 0 var(--radius-sm) 0;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid var(--color-primary-light);
 }
 
 /* ---------- CSS Reset ---------- */
@@ -162,7 +184,7 @@ ol {
   list-style: none;
 }
 
-/* ---------- Professional Background ---------- */
+/* ---------- Liquid Glass Background ---------- */
 .professional-bg {
   position: fixed;
   top: 0;
@@ -171,44 +193,69 @@ ol {
   height: 100%;
   z-index: -1;
   background: var(--color-bg-primary);
+  background-image: var(--grad-mesh);
+  background-size: 200% 200%;
+  animation: meshAnimation 20s ease infinite;
+}
+
+@keyframes meshAnimation {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
 }
 
 /* Top official banner stripe */
 .official-banner {
-  background: var(--color-primary);
-  color: var(--color-text-inverse);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(4px);
+  color: var(--color-text-secondary);
   padding: var(--space-2) var(--space-6);
   font-size: var(--text-xs);
   text-align: center;
   letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--glass-border);
 }
 
-/* ---------- Professional Card Components ---------- */
+/* ---------- Liquid Glass Components ---------- */
+.glass {
+  background: var(--color-surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
 .card {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
   transition: all var(--transition-base);
+  overflow: hidden;
 }
 
 .card:hover {
-  border-color: var(--color-border-dark);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-xl);
+  background: var(--color-surface-hover);
 }
 
 .card-header {
   padding: var(--space-4) var(--space-6);
   border-bottom: 1px solid var(--color-border);
-  background: var(--color-bg-secondary);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .panel {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-xl);
 }
 
 /* ---------- Professional Buttons ---------- */

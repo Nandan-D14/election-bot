@@ -110,13 +110,18 @@
   flex-direction: column;
 }
 
-.assistantView {
+/* Shared view base — all feature views use this */
+.featureView {
   flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 500px;
   max-height: calc(100vh - 160px);
   animation: viewIn 0.4s ease-out;
+}
+
+.assistantView {
+  composes: featureView;
 }
 
 .assistantViewFullscreen {
@@ -126,12 +131,7 @@
 }
 
 .simulatorView {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 500px;
-  max-height: calc(100vh - 160px);
-  animation: viewIn 0.4s ease-out;
+  composes: featureView;
 }
 
 .simulatorViewFullscreen {
@@ -141,85 +141,45 @@
 }
 
 .quizView {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 500px;
-  max-height: calc(100vh - 160px);
-  animation: viewIn 0.4s ease-out;
+  composes: featureView;
 }
 
 .mythsView {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 500px;
-  max-height: calc(100vh - 160px);
-  animation: viewIn 0.4s ease-out;
+  composes: featureView;
 }
 
 .chatbotView {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 500px;
-  max-height: calc(100vh - 160px);
-  animation: viewIn 0.4s ease-out;
+  composes: featureView;
 }
 
 .rulesView {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 500px;
-  max-height: calc(100vh - 160px);
-  animation: viewIn 0.4s ease-out;
+  composes: featureView;
 }
 
 .gamesView {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 500px;
-  max-height: calc(100vh - 160px);
-  animation: viewIn 0.4s ease-out;
+  composes: featureView;
 }
 
 .processMapView {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 500px;
-  max-height: calc(100vh - 160px);
-  animation: viewIn 0.4s ease-out;
+  composes: featureView;
 }
 
 .mindMapView {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 500px;
-  max-height: calc(100vh - 160px);
-  animation: viewIn 0.4s ease-out;
+  composes: featureView;
 }
 
 .verifyIdView {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 500px;
+  composes: featureView;
+  max-height: none;
   overflow-y: auto;
-  animation: viewIn 0.4s ease-out;
 }
 
 .profileView {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 500px;
+  composes: featureView;
+  max-height: none;
   overflow-y: auto;
-  animation: viewIn 0.4s ease-out;
 }
+
 
 @keyframes viewIn {
   from {

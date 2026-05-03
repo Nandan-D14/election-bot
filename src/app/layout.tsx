@@ -1,7 +1,23 @@
 import type { Metadata } from "next";
+import { Inter, Merriweather } from "next/font/google";
 import "./globals.css";
-import FirebaseAnalytics from "@/components/FirebaseAnalytics/FirebaseAnalytics";
-import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
+import FirebaseAnalytics from "@/shared/FirebaseAnalytics/FirebaseAnalytics";
+import ErrorBoundary from "@/shared/ErrorBoundary/ErrorBoundary";
+
+// Next.js font optimization — eliminates render-blocking @import
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const merriweather = Merriweather({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-merriweather",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "CivicIQ — Multilingual Electoral Education Assistant",
@@ -25,7 +41,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className={`${inter.variable} ${merriweather.variable}`}>
+        {/* Skip to Content for screen readers and keyboard users */}
+        <a href="#main-content" className="skip-link">Skip to Content</a>
+
         {/* Firebase Analytics */}
         <FirebaseAnalytics />
 

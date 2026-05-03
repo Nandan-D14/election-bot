@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   output: "standalone",
   turbopack: {
     root: __dirname,
@@ -19,7 +18,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Security headers (backup to middleware)
+  // Comprehensive security headers
   async headers() {
     return [
       {
@@ -29,10 +28,28 @@ const nextConfig: NextConfig = {
             key: "X-DNS-Prefetch-Control",
             value: "on",
           },
+          {
+            key: "X-Frame-Options",
+            value: "DENY",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
+          },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(self), geolocation=()",
+          },
         ],
       },
     ];
   },
+  // Prevent leaking source maps in production
+  productionBrowserSourceMaps: false,
 };
 
 export default nextConfig;

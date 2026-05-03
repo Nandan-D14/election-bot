@@ -9,6 +9,14 @@ interface ChatMessage {
   content: string;
 }
 
+/** Allowlisted model IDs to prevent injection of arbitrary model names */
+const ALLOWED_MODELS: Record<string, string> = {
+  "gemini 3.1 flash": "gemini-2.0-flash",
+  "gemini 3 flash": "gemini-2.0-flash-lite",
+  "gemini 3.1 pro": "gemini-2.5-pro-preview-06-05",
+  haiku: "gemini-2.0-flash",
+};
+
 export async function POST(req: Request) {
   try {
     if (!apiKey) {
@@ -19,13 +27,23 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { messages }: { messages: ChatMessage[] } = body;
+    const { messages, model: requestedModel }: { messages: ChatMessage[]; model?: string } = body;
 
-    if (!messages || !Array.isArray(messages)) {
-      return new Response(JSON.stringify({ error: "Invalid messages array" }), {
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+      return new Response(JSON.stringify({ error: "Messages array must be non-empty" }), {
         status: 400,
         headers: { "Content-Type": "application/json" },
       });
+    }
+
+    // Validate each message has required fields
+    for (const msg of messages) {
+      if (!msg.role || !msg.content || typeof msg.content !== "string") {
+        return new Response(
+          JSON.stringify({ error: "Each message must have a valid role and content" }),
+          { status: 400, headers: { "Content-Type": "application/json" } }
+        );
+      }
     }
 
     // Format history for Gemini
@@ -37,7 +55,8 @@ export async function POST(req: Request) {
 
     const latestMessage = messages[messages.length - 1];
 
-    const modelName = body.model === "haiku" ? "gemini-1.5-flash" : "gemini-1.5-pro";
+    // Resolve model name from allowlist; default to flash
+    const modelName = (requestedModel && ALLOWED_MODELS[requestedModel]) || ALLOWED_MODELS["gemini 3.1 flash"];
     const model = genAI.getGenerativeModel({ model: modelName });
 
     const chat = model.startChat({
@@ -51,10 +70,11 @@ export async function POST(req: Request) {
     // Create a ReadableStream to stream the response back to the client
     const stream = new ReadableStream({
       async start(controller) {
+        const encoder = new TextEncoder(); // Create once, reuse per chunk
         try {
           for await (const chunk of result.stream) {
             const chunkText = chunk.text();
-            controller.enqueue(new TextEncoder().encode(chunkText));
+            controller.enqueue(encoder.encode(chunkText));
           }
           controller.close();
         } catch (error) {

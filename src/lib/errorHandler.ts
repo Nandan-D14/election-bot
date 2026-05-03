@@ -10,7 +10,10 @@ export class AppError extends Error {
   ) {
     super(message);
     this.name = "AppError";
-    Error.captureStackTrace(this, this.constructor);
+    // V8-specific — guard for non-V8 environments
+    if (typeof Error.captureStackTrace === "function") {
+      Error.captureStackTrace(this, this.constructor);
+    }
   }
 }
 
@@ -80,10 +83,16 @@ export async function withErrorHandling<T>(
  */
 export function logError(error: AppError, context?: string): void {
   // In production, this would send to a monitoring service like Sentry
-  console.error(`[${error.code}] ${context || "Application"}:`, {
+  const logPayload: Record<string, unknown> = {
     message: error.message,
     statusCode: error.statusCode,
     details: error.details,
-    stack: error.stack,
-  });
+  };
+
+  // Only include stack traces in non-production environments
+  if (process.env.NODE_ENV !== "production") {
+    logPayload.stack = error.stack;
+  }
+
+  console.error(`[${error.code}] ${context || "Application"}:`, logPayload);
 }

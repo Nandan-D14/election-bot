@@ -11,7 +11,7 @@ test.describe("Accessibility Tests", () => {
   test("simulator view has no accessibility violations", async ({ page }) => {
     await page.goto("/");
     await page.locator("#start-simulator-button").click();
-    await page.waitForSelector(".simulatorView", { state: "visible" });
+    await page.waitForSelector('[data-testid="simulator-view"]', { state: "visible" });
 
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
     expect(accessibilityScanResults.violations).toEqual([]);
@@ -20,7 +20,7 @@ test.describe("Accessibility Tests", () => {
   test("assistant view has no accessibility violations", async ({ page }) => {
     await page.goto("/");
     await page.locator("#start-assistant-button").click();
-    await page.waitForSelector(".assistantView", { state: "visible" });
+    await page.waitForSelector('[data-testid="assistant-view"]', { state: "visible" });
 
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
     expect(accessibilityScanResults.violations).toEqual([]);
@@ -29,7 +29,7 @@ test.describe("Accessibility Tests", () => {
   test("quiz view has no accessibility violations", async ({ page }) => {
     await page.goto("/");
     await page.locator("#start-quiz-button").click();
-    await page.waitForSelector(".quizView", { state: "visible" });
+    await page.waitForSelector('[data-testid="quiz-view"]', { state: "visible" });
 
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
     expect(accessibilityScanResults.violations).toEqual([]);
@@ -38,7 +38,7 @@ test.describe("Accessibility Tests", () => {
   test("myth buster view has no accessibility violations", async ({ page }) => {
     await page.goto("/");
     await page.locator("#start-myths-button").click();
-    await page.waitForSelector(".mythsView", { state: "visible" });
+    await page.waitForSelector('[data-testid="myths-view"]', { state: "visible" });
 
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
     expect(accessibilityScanResults.violations).toEqual([]);
@@ -47,7 +47,7 @@ test.describe("Accessibility Tests", () => {
   test("chatbot view has no accessibility violations", async ({ page }) => {
     await page.goto("/");
     await page.locator("#start-chatbot-button").click();
-    await page.waitForSelector(".chatbotView", { state: "visible" });
+    await page.waitForSelector('[data-testid="chatbot-view"]', { state: "visible" });
 
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
     expect(accessibilityScanResults.violations).toEqual([]);

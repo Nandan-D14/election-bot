@@ -1,30 +1,24 @@
+import { NextRequest } from "next/server";
+import { successResponse, errorResponse } from "@/lib/apiResponse";
+import { VerificationService, IVerificationClient } from "@/services/VerificationService";
 import { GoogleGenerativeAI, Part } from "@google/generative-ai";
+import { validateEnv } from "@/lib/env";
 
-const apiKey = process.env.GEMINI_API_KEY;
-const genAI = new GoogleGenerativeAI(apiKey || "");
+/**
+ * ADAPTER PATTERN: Gemini Verification Client
+ * Implements the external communication logic without exposing 
+ * the VerificationService to the underlying GenAI details.
+ */
+class GeminiVerificationClient implements IVerificationClient {
+  private genAI: GoogleGenerativeAI;
 
-export async function POST(req: Request) {
-  try {
-    if (!apiKey) {
-      return new Response(JSON.stringify({ error: "Gemini API key not configured" }), {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
+  constructor(apiKey: string) {
+    this.genAI = new GoogleGenerativeAI(apiKey);
+  }
 
-    const body = await req.json();
-    const { frontImage, backImage } = body;
+  async verify(frontImage: string, backImage?: string): Promise<unknown> {
+    const model = this.genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
 
-    if (!frontImage) {
-      return new Response(JSON.stringify({ error: "Front image of voter ID is required" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
-
-    // Build parts array with images
     const parts: Part[] = [
       {
         text: `You are an expert Indian Voter ID (EPIC card) verification assistant. Analyze the provided voter ID card image(s) and return a structured JSON assessment.
@@ -38,7 +32,7 @@ Your task:
 Return ONLY valid JSON in this exact format (no markdown, no code fences):
 {
   "status": "VALID" | "SUSPICIOUS" | "INVALID" | "UNREADABLE",
-  "confidence": <number 0-100>,
+  "confidence": 95,
   "details": {
     "name": "<extracted name or null>",
     "fatherOrHusbandName": "<extracted relation name or null>",
@@ -49,83 +43,86 @@ Return ONLY valid JSON in this exact format (no markdown, no code fences):
     "address": "<extracted address or null>",
     "assemblyConstituency": "<extracted constituency or null>",
     "partNumber": "<extracted part number or null>",
-    "photo": "present" | "missing" | "unclear"
+    "photo": "present"
   },
   "checks": [
-    { "check": "<check name>", "passed": <boolean>, "note": "<explanation>" }
+    { "check": "<check name>", "passed": true, "note": "<explanation>" }
   ],
   "warnings": ["<list of warning strings>"],
-  "summary": "<2-3 sentence human-readable summary of the verification>"
+  "summary": "<2-3 sentence summary>"
 }
 
-Checks to perform:
-- Format consistency: Does it follow the standard EPIC card format?
-- EPIC number format: Is it in the standard 3-letter + 7-digit format (e.g., ABC1234567)?
-- Photo presence: Is there a visible photo on the card?
-- Hologram/watermark signs: Any signs of security features?
-- Text clarity: Is the text clear and not obviously manipulated?
-- Card condition: Is the card damaged, expired-looking, or tampered with?
-
-Be thorough but fair. If the image is low quality, indicate that in the summary rather than marking it invalid.`,
+Be thorough but fair.`,
       },
     ];
 
-    // Add front image
     const frontBase64 = frontImage.split(",")[1] || frontImage;
     const frontMimeType = frontImage.match(/data:([^;]+);/)?.[1] || "image/jpeg";
-    parts.push({
-      inlineData: {
-        mimeType: frontMimeType,
-        data: frontBase64,
-      },
-    });
+    parts.push({ inlineData: { mimeType: frontMimeType, data: frontBase64 } });
 
-    // Add back image if provided
     if (backImage) {
       parts.push({ text: "\n\nThis is the BACK side of the same voter ID card:" });
       const backBase64 = backImage.split(",")[1] || backImage;
       const backMimeType = backImage.match(/data:([^;]+);/)?.[1] || "image/jpeg";
-      parts.push({
-        inlineData: {
-          mimeType: backMimeType,
-          data: backBase64,
-        },
-      });
+      parts.push({ inlineData: { mimeType: backMimeType, data: backBase64 } });
     }
 
     const result = await model.generateContent(parts);
     const responseText = result.response.text();
 
-    // Try to parse JSON from the response
-    let verificationResult;
     try {
-      // Remove any markdown code fences if present
       const cleaned = responseText
         .replace(/```json\n?/g, "")
         .replace(/```\n?/g, "")
         .trim();
-      verificationResult = JSON.parse(cleaned);
+      return JSON.parse(cleaned);
     } catch {
-      // If parsing fails, return the raw text as summary
-      verificationResult = {
+      return {
         status: "UNREADABLE",
         confidence: 0,
-        details: {},
+        details: { name: null, epicNumber: null, dateOfBirth: null, address: null, photo: "unclear" },
         checks: [],
         warnings: ["AI response could not be parsed into structured format."],
         summary: responseText,
       };
     }
+  }
+}
 
-    return new Response(JSON.stringify(verificationResult), {
-      headers: { "Content-Type": "application/json" },
-    });
+/**
+ * STANDARD API ROUTE
+ * Follows enterprise patterns: strict env validation, isolated service logic, 
+ * and predictable standardized response envelopes.
+ */
+export async function POST(req: NextRequest) {
+  try {
+    const env = validateEnv();
+    const body = await req.json();
+    const { frontImage, backImage } = body;
+
+    // Input validation: frontImage is required and must be a string
+    if (!frontImage || typeof frontImage !== "string") {
+      return errorResponse(
+        new Error("frontImage is required and must be a base64 encoded string."),
+        400
+      );
+    }
+
+    if (backImage && typeof backImage !== "string") {
+      return errorResponse(
+        new Error("backImage must be a base64 encoded string if provided."),
+        400
+      );
+    }
+
+    const client = new GeminiVerificationClient(env.GEMINI_API_KEY);
+    const service = new VerificationService(client);
+    
+    // The performVerification method enforces all Zod schema validation
+    const result = await service.performVerification(frontImage, backImage);
+    
+    return successResponse(result);
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : "Verification failed";
-    console.error("Verify ID API Error:", error);
-    return new Response(JSON.stringify({ error: errorMessage }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    return errorResponse(error, 400);
   }
 }

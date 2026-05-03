@@ -6,25 +6,25 @@
    ID Verifier, Profile, and more.
    ============================================================ */
 
-import { useState, useCallback, useEffect, lazy, Suspense } from "react";
+import { useState, useCallback, useEffect, lazy, Suspense, useMemo } from "react";
 import type { AudioState, LanguageTag } from "@/types";
-import Header from "@/components/Header/Header";
-import FeatureCards from "@/components/FeatureCards/FeatureCards";
-import { useActivityScores } from "@/components/UserProfile/UserProfile";
+import Header from "@/shared/Header/Header";
+import FeatureCards from "@/shared/FeatureCards/FeatureCards";
+import { useActivityScores } from "@/features/UserProfile/UserProfile";
 import styles from "./page.module.css";
 
 // Lazy load heavy components for code splitting
-const VoiceAssistant = lazy(() => import("@/components/VoiceAssistant/VoiceAssistant"));
-const Chatbot = lazy(() => import("@/components/Chatbot/Chatbot"));
-const EVMSimulator = lazy(() => import("@/components/EVMSimulator/EVMSimulator"));
-const ReadinessQuiz = lazy(() => import("@/components/ReadinessQuiz/ReadinessQuiz"));
-const MythBuster = lazy(() => import("@/components/MythBuster/MythBuster"));
-const VotingRules = lazy(() => import("@/components/VotingRules/VotingRules"));
-const VotingGames = lazy(() => import("@/components/VotingGames/VotingGames"));
-const ElectionProcessMap = lazy(() => import("@/components/ElectionProcessMap/ElectionProcessMap"));
-const ElectionMindMap = lazy(() => import("@/components/ElectionMindMap/ElectionMindMap"));
-const IDVerifier = lazy(() => import("@/components/IDVerifier/IDVerifier"));
-const UserProfile = lazy(() => import("@/components/UserProfile/UserProfile"));
+const VoiceAssistant = lazy(() => import("@/features/VoiceAssistant/VoiceAssistant"));
+const Chatbot = lazy(() => import("@/features/Chatbot/Chatbot"));
+const EVMSimulator = lazy(() => import("@/features/EVMSimulator/EVMSimulator"));
+const ReadinessQuiz = lazy(() => import("@/features/ReadinessQuiz/ReadinessQuiz"));
+const MythBuster = lazy(() => import("@/features/MythBuster/MythBuster"));
+const VotingRules = lazy(() => import("@/features/VotingRules/VotingRules"));
+const VotingGames = lazy(() => import("@/features/VotingGames/VotingGames"));
+const ElectionProcessMap = lazy(() => import("@/features/ElectionProcessMap/ElectionProcessMap"));
+const ElectionMindMap = lazy(() => import("@/features/ElectionMindMap/ElectionMindMap"));
+const IDVerifier = lazy(() => import("@/features/IDVerifier/IDVerifier"));
+const UserProfile = lazy(() => import("@/features/UserProfile/UserProfile"));
 
 type ActiveView =
   | "landing"
@@ -81,26 +81,29 @@ export default function Home() {
     }
   }, [activeView, markActivity]);
 
-  const handleStartAssistant = useCallback(() => setActiveView("assistant"), []);
-  const handleStartSimulator = useCallback(() => setActiveView("simulator"), []);
-  const handleStartQuiz = useCallback(() => setActiveView("quiz"), []);
-  const handleStartMyths = useCallback(() => setActiveView("myths"), []);
-  const handleStartChatbot = useCallback(() => setActiveView("chatbot"), []);
-  const handleStartRules = useCallback(() => setActiveView("rules"), []);
-  const handleStartGames = useCallback(() => setActiveView("games"), []);
-  const handleStartProcessMap = useCallback(() => setActiveView("processmap"), []);
-  const handleStartMindMap = useCallback(() => setActiveView("mindmap"), []);
-  const handleStartVerifyId = useCallback(() => setActiveView("verifyid"), []);
-  const handleStartProfile = useCallback(() => setActiveView("profile"), []);
+  // Single dispatcher replaces 11 separate useCallback definitions
+  const navigateTo = useCallback((view: ActiveView) => setActiveView(view), []);
   const handleBackToLanding = useCallback(() => {
     setActiveView("landing");
     setAudioState("idle");
   }, []);
-  const handleSelectNav = useCallback((v: NavView) => setActiveView(v), []);
 
   const handleIdVerificationComplete = useCallback(() => {
     markActivity("idVerified");
   }, [markActivity]);
+
+  // Memoize nav object to prevent Header re-renders when nothing changed
+  const navProp = useMemo(
+    () =>
+      activeView !== "landing"
+        ? {
+            activeView,
+            onHome: handleBackToLanding,
+            onSelect: navigateTo as (v: NavView) => void,
+          }
+        : undefined,
+    [activeView, handleBackToLanding, navigateTo]
+  );
 
   return (
     <div className={styles.app}>
@@ -109,39 +112,32 @@ export default function Home() {
         language={language}
         onLanguageChange={setLanguage}
         totalPoints={totalPoints}
-        onProfileClick={handleStartProfile}
-        nav={
-          activeView !== "landing"
-            ? {
-                activeView,
-                onHome: handleBackToLanding,
-                onSelect: handleSelectNav,
-              }
-            : undefined
-        }
+        onProfileClick={() => navigateTo("profile")}
+        nav={navProp}
       />
 
-      <main className={`${styles.main} ${isFullscreenView ? styles.mainFullscreen : ""}`}>
+      <main id="main-content" className={`${styles.main} ${isFullscreenView ? styles.mainFullscreen : ""}`}>
         {/* Views */}
         <div className={styles.viewContainer}>
           {activeView === "landing" && (
             <FeatureCards
-              onStartAssistant={handleStartAssistant}
-              onStartSimulator={handleStartSimulator}
-              onStartQuiz={handleStartQuiz}
-              onStartMyths={handleStartMyths}
-              onStartChatbot={handleStartChatbot}
-              onStartRules={handleStartRules}
-              onStartGames={handleStartGames}
-              onStartProcessMap={handleStartProcessMap}
-              onStartMindMap={handleStartMindMap}
-              onStartVerifyId={handleStartVerifyId}
-              onStartProfile={handleStartProfile}
+              onStartAssistant={() => navigateTo("assistant")}
+              onStartSimulator={() => navigateTo("simulator")}
+              onStartQuiz={() => navigateTo("quiz")}
+              onStartMyths={() => navigateTo("myths")}
+              onStartChatbot={() => navigateTo("chatbot")}
+              onStartRules={() => navigateTo("rules")}
+              onStartGames={() => navigateTo("games")}
+              onStartProcessMap={() => navigateTo("processmap")}
+              onStartMindMap={() => navigateTo("mindmap")}
+              onStartVerifyId={() => navigateTo("verifyid")}
+              onStartProfile={() => navigateTo("profile")}
             />
           )}
 
           {activeView === "assistant" && (
             <div
+              data-testid="assistant-view"
               className={`${styles.assistantView} ${
                 isFullscreenView ? styles.assistantViewFullscreen : ""
               }`}
@@ -154,6 +150,7 @@ export default function Home() {
 
           {activeView === "simulator" && (
             <div
+              data-testid="simulator-view"
               className={`${styles.simulatorView} ${
                 isFullscreenView ? styles.simulatorViewFullscreen : ""
               }`}
@@ -165,7 +162,7 @@ export default function Home() {
           )}
 
           {activeView === "quiz" && (
-            <div className={styles.quizView}>
+            <div data-testid="quiz-view" className={styles.quizView}>
               <Suspense fallback={<LoadingFallback />}>
                 <ReadinessQuiz />
               </Suspense>
@@ -173,7 +170,7 @@ export default function Home() {
           )}
 
           {activeView === "myths" && (
-            <div className={styles.mythsView}>
+            <div data-testid="myths-view" className={styles.mythsView}>
               <Suspense fallback={<LoadingFallback />}>
                 <MythBuster />
               </Suspense>
@@ -181,7 +178,7 @@ export default function Home() {
           )}
 
           {activeView === "chatbot" && (
-            <div className={styles.chatbotView}>
+            <div data-testid="chatbot-view" className={styles.chatbotView}>
               <Suspense fallback={<LoadingFallback />}>
                 <Chatbot />
               </Suspense>
@@ -189,7 +186,7 @@ export default function Home() {
           )}
 
           {activeView === "rules" && (
-            <div className={styles.rulesView}>
+            <div data-testid="rules-view" className={styles.rulesView}>
               <Suspense fallback={<LoadingFallback />}>
                 <VotingRules />
               </Suspense>
@@ -197,7 +194,7 @@ export default function Home() {
           )}
 
           {activeView === "games" && (
-            <div className={styles.gamesView}>
+            <div data-testid="games-view" className={styles.gamesView}>
               <Suspense fallback={<LoadingFallback />}>
                 <VotingGames />
               </Suspense>
@@ -205,7 +202,7 @@ export default function Home() {
           )}
 
           {activeView === "processmap" && (
-            <div className={styles.processMapView}>
+            <div data-testid="process-map-view" className={styles.processMapView}>
               <Suspense fallback={<LoadingFallback />}>
                 <ElectionProcessMap />
               </Suspense>
@@ -213,7 +210,7 @@ export default function Home() {
           )}
 
           {activeView === "mindmap" && (
-            <div className={styles.mindMapView}>
+            <div data-testid="mind-map-view" className={styles.mindMapView}>
               <Suspense fallback={<LoadingFallback />}>
                 <ElectionMindMap />
               </Suspense>
@@ -221,7 +218,7 @@ export default function Home() {
           )}
 
           {activeView === "verifyid" && (
-            <div className={styles.verifyIdView}>
+            <div data-testid="verify-id-view" className={styles.verifyIdView}>
               <Suspense fallback={<LoadingFallback />}>
                 <IDVerifier onVerificationComplete={handleIdVerificationComplete} />
               </Suspense>
@@ -229,7 +226,7 @@ export default function Home() {
           )}
 
           {activeView === "profile" && (
-            <div className={styles.profileView}>
+            <div data-testid="profile-view" className={styles.profileView}>
               <Suspense fallback={<LoadingFallback />}>
                 <UserProfile
                   scores={scores}
@@ -246,14 +243,16 @@ export default function Home() {
   );
 }
 
-// Loading fallback for lazy-loaded components
+// Hoisted style objects — avoids re-creating inline objects on every render
+const loadingContainerStyle = { display: "flex", justifyContent: "center", alignItems: "center", height: "400px" } as const;
+const loadingTextStyle = { textAlign: "center" as const };
+const loadingLabelStyle = { fontSize: "1.5rem", color: "var(--color-text-muted)" };
+
 function LoadingFallback() {
   return (
-    <div
-      style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "400px" }}
-    >
-      <div style={{ textAlign: "center" }}>
-        <div style={{ fontSize: "1.5rem", color: "var(--color-text-muted)" }}>Loading...</div>
+    <div style={loadingContainerStyle}>
+      <div style={loadingTextStyle}>
+        <div style={loadingLabelStyle}>Loading...</div>
       </div>
     </div>
   );
