@@ -8,7 +8,7 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json package-lock.json* ./
-RUN npm ci --prefer-offline --no-audit
+RUN npm install --prefer-offline --no-audit
 
 # Rebuild the source code only when needed
 FROM base AS builder
