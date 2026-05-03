@@ -30,9 +30,9 @@ const SUGGESTION_CHIPS: SuggestionChip[] = [
 ];
 
 const MODELS = [
-  { id: 'sonnet', name: 'Sonnet 4.6', label: 'Adaptive' },
-  { id: 'opus', name: 'Opus', label: 'Max' },
-  { id: 'haiku', name: 'Haiku', label: 'Fast' },
+  { id: 'gemini 3.1 flash', name: 'gemini 3.1 flash 4.6', label: 'fast' },
+  { id: 'gemini 3 flash', name: 'gemini 3 flash', label: 'thinking' },
+  { id: 'gemini 3.1 pro', name: 'gemini 3.1 pro', label: 'high' },
 ];
 
 export default function Chatbot() {
