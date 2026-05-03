@@ -1,0 +1,172 @@
+/* ============================================================
+   CivicIQ — Readiness Quiz Styles
+   ============================================================ */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-8) var(--space-6);
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(24px) saturate(1.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-glass-lg);
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+  min-height: 400px;
+  justify-content: center;
+}
+
+.animateIn {
+  animation: slideUpFade 0.4s ease-out forwards;
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.centerContent, .questionCard, .resultCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+}
+
+.heroIcon {
+  font-size: 3.5rem;
+}
+
+.title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.description {
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  max-width: 400px;
+}
+
+.btnPrimary {
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-8);
+  background: linear-gradient(135deg, var(--color-accent-1), var(--color-accent-3));
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(167, 139, 250, 0.4);
+}
+
+.btnSecondary {
+  padding: var(--space-2) var(--space-6);
+  background: transparent;
+  color: var(--color-text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnSecondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-text-primary);
+}
+
+/* Question Flow */
+.stepIndicator {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-accent-2);
+  font-weight: 600;
+}
+
+.questionText {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-6);
+  max-width: 480px;
+  line-height: 1.4;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  max-width: 400px;
+}
+
+.btnOption {
+  padding: var(--space-4);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-primary);
+  font-size: var(--text-base);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnOption:hover {
+  background: rgba(79, 138, 255, 0.15);
+  border-color: rgba(79, 138, 255, 0.4);
+  transform: translateX(4px);
+}
+
+/* Results */
+.resultIconSuccess { font-size: 4rem; color: var(--color-success); }
+.resultIconWarning { font-size: 4rem; }
+.resultIconError { font-size: 4rem; }
+
+.checklist {
+  text-align: left;
+  background: rgba(0, 0, 0, 0.2);
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  width: 100%;
+  margin-top: var(--space-2);
+}
+
+.checklistTitle {
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-3);
+}
+
+.checklist ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.checklist li {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.checklist b {
+  color: var(--color-text-primary);
+}

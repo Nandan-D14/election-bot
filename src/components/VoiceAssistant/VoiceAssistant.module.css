@@ -1,0 +1,266 @@
+/* ============================================================
+   CivicIQ — Voice Assistant (Calling-style Interface)
+   ============================================================ */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 100%;
+  background: var(--color-bg-primary);
+  position: relative;
+  overflow: hidden;
+  padding: clamp(var(--space-4), 3vw, var(--space-10));
+}
+
+.orbContainer {
+  min-height: 0;
+}
+
+/* Status Dot */
+.statusDot {
+  position: absolute;
+  top: 24px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+/* Orb Container */
+.orbContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+/* Main Orb */
+.orb {
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  border: 3px solid var(--color-border-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: var(--shadow-md);
+}
+
+.orb:hover {
+  transform: scale(1.02);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary);
+}
+
+.orbActive {
+  animation: orbBreathe 3s ease-in-out infinite;
+  background: var(--color-bg-secondary);
+  border-color: var(--color-accent-1);
+}
+
+@keyframes orbBreathe {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: var(--shadow-md);
+  }
+  50% {
+    transform: scale(1.03);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+.orbIcon {
+  width: 48px;
+  height: 48px;
+  color: var(--color-text-muted);
+  transition: all 0.3s ease;
+}
+
+.orb:hover .orbIcon {
+  color: var(--color-primary);
+  transform: scale(1.1);
+}
+
+/* Audio Indicator */
+.audioIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: var(--space-6);
+}
+
+.micIcon {
+  width: 16px;
+  height: 16px;
+  color: var(--color-text-secondary);
+}
+
+.audioDots {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.audioDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+  transition: all 0.1s ease;
+}
+
+/* Status Text */
+.statusText {
+  font-size: var(--text-base);
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-12);
+  letter-spacing: 0.01em;
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  margin-bottom: var(--space-8);
+}
+
+.controlButton {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  border: 2px solid var(--color-border-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.controlButton svg {
+  width: 20px;
+  height: 20px;
+  color: var(--color-text-secondary);
+}
+
+.controlButton:hover {
+  background: var(--color-bg-secondary);
+  border-color: var(--color-primary);
+  transform: scale(1.05);
+}
+
+.controlButton:hover svg {
+  color: var(--color-primary);
+}
+
+.controlButton:active {
+  transform: scale(0.95);
+}
+
+/* End Call Button */
+.endButton {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--color-secondary);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-md);
+}
+
+.endButton svg {
+  width: 24px;
+  height: 24px;
+  color: var(--color-text-inverse);
+}
+
+.endButton:hover {
+  background: var(--color-secondary-light);
+  transform: scale(1.05);
+  box-shadow: var(--shadow-lg);
+}
+
+.endButton:active {
+  transform: scale(0.95);
+}
+
+/* Bottom Bar */
+.bottomBar {
+  position: absolute;
+  bottom: 8px;
+  width: 40%;
+  max-width: 200px;
+  height: 4px;
+  background: var(--color-border-dark);
+  border-radius: 2px;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .container {
+    padding: var(--space-4);
+  }
+
+  .orb {
+    width: 220px;
+    height: 220px;
+  }
+
+  .orbIcon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .controls {
+    gap: var(--space-6);
+    margin-bottom: var(--space-6);
+  }
+
+  .controlButton {
+    width: 48px;
+    height: 48px;
+  }
+
+  .endButton {
+    width: 56px;
+    height: 56px;
+  }
+
+  .statusText {
+    margin-bottom: var(--space-8);
+  }
+}
+
+@media (max-height: 700px) {
+  .orb {
+    width: 220px;
+    height: 220px;
+  }
+
+  .controls {
+    margin-bottom: var(--space-6);
+  }
+
+  .statusText {
+    margin-bottom: var(--space-8);
+  }
+}

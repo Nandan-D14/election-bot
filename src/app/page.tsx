@@ -1,63 +1,146 @@
-import Image from "next/image";
+'use client';
 
+/* ============================================================
+   CivicIQ — Main Page
+   The home page with 3 views: Landing, Assistant, and Simulator.
+   ============================================================ */
+
+import { useState, useCallback } from 'react';
+import type { AudioState, LanguageTag } from '@/types';
+import Header from '@/components/Header/Header';
+import FeatureCards from '@/components/FeatureCards/FeatureCards';
+import VoiceAssistant from '@/components/VoiceAssistant/VoiceAssistant';
+import Chatbot from '@/components/Chatbot/Chatbot';
+import EVMSimulator from '@/components/EVMSimulator/EVMSimulator';
+import ReadinessQuiz from '@/components/ReadinessQuiz/ReadinessQuiz';
+import MythBuster from '@/components/MythBuster/MythBuster';
+import VotingRules from '@/components/VotingRules/VotingRules';
+import VotingGames from '@/components/VotingGames/VotingGames';
+import ElectionProcessMap from '@/components/ElectionProcessMap/ElectionProcessMap';
+import ElectionMindMap from '@/components/ElectionMindMap/ElectionMindMap';
+import styles from './page.module.css';
+
+type ActiveView = 'landing' | 'assistant' | 'simulator' | 'quiz' | 'myths' | 'chatbot' | 'rules' | 'games' | 'processmap' | 'mindmap';
+type NavView = Exclude<ActiveView, 'landing'>;
 export default function Home() {
+  const [activeView, setActiveView] = useState<ActiveView>('landing');
+  const [audioState, setAudioState] = useState<AudioState>('idle');
+  const [language, setLanguage] = useState<LanguageTag>('hi-IN');
+  const isFullscreenView = activeView === 'simulator' || activeView === 'assistant';
+
+  const handleStartAssistant = useCallback(() => setActiveView('assistant'), []);
+  const handleStartSimulator = useCallback(() => setActiveView('simulator'), []);
+  const handleStartQuiz = useCallback(() => setActiveView('quiz'), []);
+  const handleStartMyths = useCallback(() => setActiveView('myths'), []);
+  const handleStartChatbot = useCallback(() => setActiveView('chatbot'), []);
+  const handleStartRules = useCallback(() => setActiveView('rules'), []);
+  const handleStartGames = useCallback(() => setActiveView('games'), []);
+  const handleStartProcessMap = useCallback(() => setActiveView('processmap'), []);
+  const handleStartMindMap = useCallback(() => setActiveView('mindmap'), []);
+  const handleBackToLanding = useCallback(() => {
+    setActiveView('landing');
+    setAudioState('idle');
+  }, []);
+  const handleSelectNav = useCallback((v: NavView) => setActiveView(v), []);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <div className={styles.app}>
+      <Header
+        audioState={audioState}
+        language={language}
+        onLanguageChange={setLanguage}
+        nav={
+          activeView !== 'landing'
+            ? {
+                activeView,
+                onHome: handleBackToLanding,
+                onSelect: handleSelectNav,
+              }
+            : undefined
+        }
+      />
+
+      <main className={`${styles.main} ${isFullscreenView ? styles.mainFullscreen : ''}`}>
+        {/* Views */}
+        <div className={styles.viewContainer}>
+          {activeView === 'landing' && (
+            <FeatureCards
+              onStartAssistant={handleStartAssistant}
+              onStartSimulator={handleStartSimulator}
+              onStartQuiz={handleStartQuiz}
+              onStartMyths={handleStartMyths}
+              onStartChatbot={handleStartChatbot}
+              onStartRules={handleStartRules}
+              onStartGames={handleStartGames}
+              onStartProcessMap={handleStartProcessMap}
+              onStartMindMap={handleStartMindMap}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          )}
+
+          {activeView === 'assistant' && (
+            <div
+              className={`${styles.assistantView} ${
+                isFullscreenView ? styles.assistantViewFullscreen : ''
+              }`}
+            >
+              <VoiceAssistant
+                audioState={audioState}
+                onAudioStateChange={setAudioState}
+              />
+            </div>
+          )}
+
+          {activeView === 'simulator' && (
+            <div
+              className={`${styles.simulatorView} ${
+                isFullscreenView ? styles.simulatorViewFullscreen : ''
+              }`}
+            >
+              <EVMSimulator />
+            </div>
+          )}
+
+          {activeView === 'quiz' && (
+            <div className={styles.quizView}>
+              <ReadinessQuiz />
+            </div>
+          )}
+
+          {activeView === 'myths' && (
+            <div className={styles.mythsView}>
+              <MythBuster />
+            </div>
+          )}
+
+          {activeView === 'chatbot' && (
+            <div className={styles.chatbotView}>
+              <Chatbot />
+            </div>
+          )}
+
+          {activeView === 'rules' && (
+            <div className={styles.rulesView}>
+              <VotingRules />
+            </div>
+          )}
+
+          {activeView === 'games' && (
+            <div className={styles.gamesView}>
+              <VotingGames />
+            </div>
+          )}
+
+          {activeView === 'processmap' && (
+            <div className={styles.processMapView}>
+              <ElectionProcessMap />
+            </div>
+          )}
+
+          {activeView === 'mindmap' && (
+            <div className={styles.mindMapView}>
+              <ElectionMindMap />
+            </div>
+          )}
         </div>
       </main>
     </div>

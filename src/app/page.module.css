@@ -1,0 +1,205 @@
+/* ============================================================
+   CivicIQ — Main Page Styles
+   ============================================================ */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: var(--space-4) var(--space-6);
+}
+
+.mainFullscreen {
+  max-width: none;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 640px) {
+  .main {
+    padding: var(--space-3) var(--space-4);
+  }
+}
+
+/* Tab Bar */
+.tabBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-radius: var(--radius-sm);
+}
+
+.backButton:hover {
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.tabs {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-1);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-full);
+}
+
+.tab {
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: none;
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tab:hover {
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.tabActive {
+  color: var(--color-text-primary);
+  background: rgba(79, 138, 255, 0.12);
+}
+
+/* View Container */
+.viewContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.assistantView {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+  max-height: calc(100vh - 160px);
+  animation: viewIn 0.4s ease-out;
+}
+
+.assistantViewFullscreen {
+  min-height: 0;
+  max-height: none;
+  height: 100%;
+}
+
+.simulatorView {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+  max-height: calc(100vh - 160px);
+  animation: viewIn 0.4s ease-out;
+}
+
+.simulatorViewFullscreen {
+  min-height: 0;
+  max-height: none;
+  height: 100%;
+}
+
+.quizView {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+  max-height: calc(100vh - 160px);
+  animation: viewIn 0.4s ease-out;
+}
+
+.mythsView {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+  max-height: calc(100vh - 160px);
+  animation: viewIn 0.4s ease-out;
+}
+
+.chatbotView {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+  max-height: calc(100vh - 160px);
+  animation: viewIn 0.4s ease-out;
+}
+
+.rulesView {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+  max-height: calc(100vh - 160px);
+  animation: viewIn 0.4s ease-out;
+}
+
+.gamesView {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+  max-height: calc(100vh - 160px);
+  animation: viewIn 0.4s ease-out;
+}
+
+.processMapView {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+  max-height: calc(100vh - 160px);
+  animation: viewIn 0.4s ease-out;
+}
+
+.mindMapView {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+  max-height: calc(100vh - 160px);
+  animation: viewIn 0.4s ease-out;
+}
+
+@keyframes viewIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
