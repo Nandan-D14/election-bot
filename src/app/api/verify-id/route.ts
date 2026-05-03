@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAI, Part } from '@google/generative-ai';
 
 const apiKey = process.env.GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(apiKey || '');
@@ -25,7 +25,7 @@ export async function POST(req: Request) {
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
 
     // Build parts array with images
-    const parts: any[] = [
+    const parts: Part[] = [
       {
         text: `You are an expert Indian Voter ID (EPIC card) verification assistant. Analyze the provided voter ID card image(s) and return a structured JSON assessment.
 
@@ -117,10 +117,11 @@ Be thorough but fair. If the image is low quality, indicate that in the summary 
     return new Response(JSON.stringify(verificationResult), {
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Verification failed';
     console.error('Verify ID API Error:', error);
     return new Response(
-      JSON.stringify({ error: error.message || 'Verification failed' }),
+      JSON.stringify({ error: errorMessage }),
       {
         status: 500,
         headers: { 'Content-Type': 'application/json' },

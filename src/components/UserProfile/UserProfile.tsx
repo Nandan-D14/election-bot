@@ -48,30 +48,30 @@ const MAX_POINTS = ACTIVITIES.reduce((sum, a) => sum + a.points, 0);
 const STORAGE_KEY = 'civiciq_activity_scores';
 
 export function useActivityScores() {
-  const [scores, setScores] = useState<ActivityScores>({
-    chatbotUsed: false,
-    voiceAssistantUsed: false,
-    evmSimulatorCompleted: false,
-    quizCompleted: false,
-    mythBusterUsed: false,
-    votingRulesRead: false,
-    votingGamesPlayed: false,
-    processMapViewed: false,
-    mindMapViewed: false,
-    idVerified: false,
-  });
+  const [scores, setScores] = useState<ActivityScores>(() => {
+    // Default initial scores
+    const defaultScores: ActivityScores = {
+      chatbotUsed: false,
+      voiceAssistantUsed: false,
+      evmSimulatorCompleted: false,
+      quizCompleted: false,
+      mythBusterUsed: false,
+      votingRulesRead: false,
+      votingGamesPlayed: false,
+      processMapViewed: false,
+      mindMapViewed: false,
+      idVerified: false,
+    };
 
-  // Load from localStorage on mount
-  useEffect(() => {
+    if (typeof window === 'undefined') return defaultScores;
+
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        setScores(JSON.parse(saved));
-      }
+      return saved ? JSON.parse(saved) : defaultScores;
     } catch {
-      // localStorage not available or corrupt data
+      return defaultScores;
     }
-  }, []);
+  });
 
   // Save to localStorage on change
   useEffect(() => {

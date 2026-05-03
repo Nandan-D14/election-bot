@@ -4,6 +4,11 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 const apiKey = process.env.GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(apiKey || '');
 
+interface ChatMessage {
+  role: 'user' | 'assistant' | 'model';
+  content: string;
+}
+
 export async function POST(req: Request) {
   try {
     if (!apiKey) {
@@ -14,7 +19,7 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { messages } = body;
+    const { messages }: { messages: ChatMessage[] } = body;
 
     if (!messages || !Array.isArray(messages)) {
       return new Response(JSON.stringify({ error: 'Invalid messages array' }), {
@@ -25,7 +30,7 @@ export async function POST(req: Request) {
 
     // Format history for Gemini
     // Gemini uses "user" and "model" as roles
-    const history = messages.slice(0, -1).map((msg: any) => ({
+    const history = messages.slice(0, -1).map((msg) => ({
       role: msg.role === 'user' ? 'user' : 'model',
       parts: [{ text: msg.content }],
     }));
@@ -64,9 +69,10 @@ export async function POST(req: Request) {
         'Transfer-Encoding': 'chunked',
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Something went wrong';
     console.error('Chat API Error:', error);
-    return new Response(JSON.stringify({ error: error.message || 'Something went wrong' }), {
+    return new Response(JSON.stringify({ error: errorMessage }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });

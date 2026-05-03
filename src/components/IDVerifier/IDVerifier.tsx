@@ -141,8 +141,9 @@ export default function IDVerifier({ onVerificationComplete }: IDVerifierProps) 
       if (onVerificationComplete) {
         onVerificationComplete();
       }
-    } catch (err: any) {
-      setError(err.message || 'Something went wrong. Please try again.');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Something went wrong. Please try again.';
+      setError(errorMessage);
     } finally {
       setIsVerifying(false);
     }

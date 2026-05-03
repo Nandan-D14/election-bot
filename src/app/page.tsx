@@ -72,15 +72,6 @@ export default function Home() {
     markActivity('idVerified');
   }, [markActivity]);
 
-  // Loading fallback for lazy-loaded components
-  const LoadingFallback = () => (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '400px' }}>
-      <div style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: '1.5rem', color: 'var(--color-text-muted)' }}>Loading...</div>
-      </div>
-    </div>
-  );
-
   return (
     <div className={styles.app}>
       <Header
@@ -227,3 +218,15 @@ export default function Home() {
     </div>
   );
 }
+
+// Loading fallback for lazy-loaded components
+function LoadingFallback() {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '400px' }}>
+      <div style={{ textAlign: 'center' }}>
+        <div style={{ fontSize: '1.5rem', color: 'var(--color-text-muted)' }}>Loading...</div>
+      </div>
+    </div>
+  );
+}
+
