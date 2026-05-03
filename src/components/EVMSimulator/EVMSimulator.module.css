@@ -67,7 +67,7 @@
 .toggleActive {
   background: rgba(255, 255, 255, 0.1);
   color: var(--color-text-primary);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .stepCounter {
@@ -360,8 +360,14 @@
 }
 
 @keyframes slipDrop {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .slipSymbol {
@@ -392,8 +398,12 @@
 }
 
 @keyframes timerShrink {
-  from { width: 100%; }
-  to { width: 0%; }
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
 }
 
 /* Info Panel */

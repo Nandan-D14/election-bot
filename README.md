@@ -134,7 +134,7 @@ The project is configured for deployment to Google Cloud Run via GitHub Actions.
 - Screen reader compatibility
 - Accessibility testing with axe-core
 
-## Tools Used 
+## Tools Used
 
 - Next.js 16 with App Router
 - TypeScript
@@ -149,8 +149,8 @@ The project is configured for deployment to Google Cloud Run via GitHub Actions.
 - Gemini CLI
 - Antigravity IDE
 - Gemini Code Assistant
-- Google Stitch AI 
-- Google Jules 
+- Google Stitch AI
+- Google Jules
 
 ## Learn More
 

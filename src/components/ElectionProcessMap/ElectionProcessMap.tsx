@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
 /* ============================================================
    ElectionProcessMap — Visual Election Timeline & Flow
    Interactive process map showing election phases
    ============================================================ */
 
-import { useState, useRef } from 'react';
-import styles from './ElectionProcessMap.module.css';
+import { useState, useRef } from "react";
+import styles from "./ElectionProcessMap.module.css";
 
-type ViewMode = 'timeline' | 'flowchart' | 'cycle';
+type ViewMode = "timeline" | "flowchart" | "cycle";
 
 interface ProcessPhase {
   id: string;
@@ -23,88 +23,88 @@ interface ProcessPhase {
 
 const ELECTION_PHASES: ProcessPhase[] = [
   {
-    id: 'registration',
-    title: 'Voter Registration',
-    icon: '📝',
-    description: 'Citizens register to become eligible voters',
-    substeps: ['Fill Form 6', 'Submit documents', 'BLO verification', 'Get EPIC card'],
-    duration: 'Continuous + Updates',
-    color: '#4f8aff',
+    id: "registration",
+    title: "Voter Registration",
+    icon: "📝",
+    description: "Citizens register to become eligible voters",
+    substeps: ["Fill Form 6", "Submit documents", "BLO verification", "Get EPIC card"],
+    duration: "Continuous + Updates",
+    color: "#4f8aff",
     position: { x: 10, y: 50 },
   },
   {
-    id: 'notification',
-    title: 'Election Notification',
-    icon: '📢',
-    description: 'ECI announces election schedule',
-    substeps: ['Schedule announcement', 'Model Code of Conduct', 'Press conference'],
-    duration: 'Day 0',
-    color: '#feca57',
+    id: "notification",
+    title: "Election Notification",
+    icon: "📢",
+    description: "ECI announces election schedule",
+    substeps: ["Schedule announcement", "Model Code of Conduct", "Press conference"],
+    duration: "Day 0",
+    color: "#feca57",
     position: { x: 25, y: 30 },
   },
   {
-    id: 'nomination',
-    title: 'Nomination Filing',
-    icon: '📋',
-    description: 'Candidates file nomination papers',
-    substeps: ['Get forms', 'Fill affidavits', 'Submit deposit', 'Scrutiny'],
-    duration: 'Days 1-7',
-    color: '#a78bfa',
+    id: "nomination",
+    title: "Nomination Filing",
+    icon: "📋",
+    description: "Candidates file nomination papers",
+    substeps: ["Get forms", "Fill affidavits", "Submit deposit", "Scrutiny"],
+    duration: "Days 1-7",
+    color: "#a78bfa",
     position: { x: 40, y: 50 },
   },
   {
-    id: 'campaign',
-    title: 'Campaign Period',
-    icon: '📣',
-    description: 'Candidates campaign for votes',
-    substeps: ['Rallies', 'Manifesto release', 'Media debates', 'Door-to-door'],
-    duration: 'Days 8-25',
-    color: '#f472b6',
+    id: "campaign",
+    title: "Campaign Period",
+    icon: "📣",
+    description: "Candidates campaign for votes",
+    substeps: ["Rallies", "Manifesto release", "Media debates", "Door-to-door"],
+    duration: "Days 8-25",
+    color: "#f472b6",
     position: { x: 55, y: 30 },
   },
   {
-    id: 'polling',
-    title: 'Polling Day',
-    icon: '🗳️',
-    description: 'Voters cast their votes',
-    substeps: ['Queue up', 'ID verification', 'Vote casting', 'VVPAT check'],
-    duration: 'Day E',
-    color: '#22d3ee',
+    id: "polling",
+    title: "Polling Day",
+    icon: "🗳️",
+    description: "Voters cast their votes",
+    substeps: ["Queue up", "ID verification", "Vote casting", "VVPAT check"],
+    duration: "Day E",
+    color: "#22d3ee",
     position: { x: 70, y: 50 },
   },
   {
-    id: 'counting',
-    title: 'Vote Counting',
-    icon: '📊',
-    description: 'Votes are counted and results declared',
-    substeps: ['EVM counting', 'VVPAT verification', 'Result compilation', 'Winner declaration'],
-    duration: 'Day E+3',
-    color: '#34d399',
+    id: "counting",
+    title: "Vote Counting",
+    icon: "📊",
+    description: "Votes are counted and results declared",
+    substeps: ["EVM counting", "VVPAT verification", "Result compilation", "Winner declaration"],
+    duration: "Day E+3",
+    color: "#34d399",
     position: { x: 85, y: 30 },
   },
   {
-    id: 'gazette',
-    title: 'Gazette Notification',
-    icon: '📜',
-    description: 'Official gazette notification of winners',
-    substeps: ['Official notification', 'Constituency-wise results', 'Winner credentials'],
-    duration: 'Day E+7',
-    color: '#fb923c',
+    id: "gazette",
+    title: "Gazette Notification",
+    icon: "📜",
+    description: "Official gazette notification of winners",
+    substeps: ["Official notification", "Constituency-wise results", "Winner credentials"],
+    duration: "Day E+7",
+    color: "#fb923c",
     position: { x: 95, y: 50 },
   },
 ];
 
 const CONNECTING_LINES = [
-  { from: 'registration', to: 'notification' },
-  { from: 'notification', to: 'nomination' },
-  { from: 'nomination', to: 'campaign' },
-  { from: 'campaign', to: 'polling' },
-  { from: 'polling', to: 'counting' },
-  { from: 'counting', to: 'gazette' },
+  { from: "registration", to: "notification" },
+  { from: "notification", to: "nomination" },
+  { from: "nomination", to: "campaign" },
+  { from: "campaign", to: "polling" },
+  { from: "polling", to: "counting" },
+  { from: "counting", to: "gazette" },
 ];
 
 export default function ElectionProcessMap() {
-  const [viewMode, setViewMode] = useState<ViewMode>('timeline');
+  const [viewMode, setViewMode] = useState<ViewMode>("timeline");
   const [activePhase, setActivePhase] = useState<string | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
 
@@ -118,20 +118,20 @@ export default function ElectionProcessMap() {
 
         <div className={styles.viewToggle}>
           <button
-            className={`${styles.viewButton} ${viewMode === 'timeline' ? styles.viewActive : ''}`}
-            onClick={() => setViewMode('timeline')}
+            className={`${styles.viewButton} ${viewMode === "timeline" ? styles.viewActive : ""}`}
+            onClick={() => setViewMode("timeline")}
           >
             📅 Timeline
           </button>
           <button
-            className={`${styles.viewButton} ${viewMode === 'flowchart' ? styles.viewActive : ''}`}
-            onClick={() => setViewMode('flowchart')}
+            className={`${styles.viewButton} ${viewMode === "flowchart" ? styles.viewActive : ""}`}
+            onClick={() => setViewMode("flowchart")}
           >
             🔄 Flowchart
           </button>
           <button
-            className={`${styles.viewButton} ${viewMode === 'cycle' ? styles.viewActive : ''}`}
-            onClick={() => setViewMode('cycle')}
+            className={`${styles.viewButton} ${viewMode === "cycle" ? styles.viewActive : ""}`}
+            onClick={() => setViewMode("cycle")}
           >
             ♻️ Cycle View
           </button>
@@ -141,15 +141,15 @@ export default function ElectionProcessMap() {
       <div className={styles.content}>
         {/* Map Visualization */}
         <div className={styles.mapContainer}>
-          {viewMode === 'timeline' && (
+          {viewMode === "timeline" && (
             <div className={styles.timelineView}>
               <div className={styles.timelineLine} />
               <div className={styles.timelinePhases}>
                 {ELECTION_PHASES.map((phase, index) => (
                   <div
                     key={phase.id}
-                    className={`${styles.timelinePhase} ${activePhase === phase.id ? styles.phaseActive : ''}`}
-                    style={{ '--phase-color': phase.color } as React.CSSProperties}
+                    className={`${styles.timelinePhase} ${activePhase === phase.id ? styles.phaseActive : ""}`}
+                    style={{ "--phase-color": phase.color } as React.CSSProperties}
                     onClick={() => setActivePhase(phase.id)}
                   >
                     <div className={styles.phaseNode}>
@@ -166,7 +166,7 @@ export default function ElectionProcessMap() {
             </div>
           )}
 
-          {viewMode === 'flowchart' && (
+          {viewMode === "flowchart" && (
             <div className={styles.flowchartView}>
               <svg ref={svgRef} className={styles.flowchartSvg} viewBox="0 0 1000 600">
                 {/* Connection Lines */}
@@ -189,7 +189,14 @@ export default function ElectionProcessMap() {
 
                 {/* Arrow Marker */}
                 <defs>
-                  <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <marker
+                    id="arrowhead"
+                    markerWidth="10"
+                    markerHeight="7"
+                    refX="9"
+                    refY="3.5"
+                    orient="auto"
+                  >
                     <polygon points="0 0, 10 3.5, 0 7" fill="rgba(255,255,255,0.3)" />
                   </marker>
                 </defs>
@@ -199,15 +206,15 @@ export default function ElectionProcessMap() {
                   <g
                     key={phase.id}
                     transform={`translate(${phase.position.x * 10 - 40}, ${phase.position.y * 6 - 40})`}
-                    className={`${styles.flowNode} ${activePhase === phase.id ? styles.flowNodeActive : ''}`}
+                    className={`${styles.flowNode} ${activePhase === phase.id ? styles.flowNodeActive : ""}`}
                     onClick={() => setActivePhase(phase.id)}
-                    style={{ cursor: 'pointer' }}
+                    style={{ cursor: "pointer" }}
                   >
                     <rect
                       width="80"
                       height="80"
                       rx="12"
-                      fill={activePhase === phase.id ? phase.color : 'rgba(255,255,255,0.05)'}
+                      fill={activePhase === phase.id ? phase.color : "rgba(255,255,255,0.05)"}
                       stroke={phase.color}
                       strokeWidth={activePhase === phase.id ? 3 : 1}
                       className={styles.nodeRect}
@@ -215,7 +222,14 @@ export default function ElectionProcessMap() {
                     <text x="40" y="35" textAnchor="middle" fill="white" fontSize="24">
                       {phase.icon}
                     </text>
-                    <text x="40" y="60" textAnchor="middle" fill="white" fontSize="10" fontWeight="600">
+                    <text
+                      x="40"
+                      y="60"
+                      textAnchor="middle"
+                      fill="white"
+                      fontSize="10"
+                      fontWeight="600"
+                    >
                       {phase.title}
                     </text>
                   </g>
@@ -224,7 +238,7 @@ export default function ElectionProcessMap() {
             </div>
           )}
 
-          {viewMode === 'cycle' && (
+          {viewMode === "cycle" && (
             <div className={styles.cycleView}>
               <div className={styles.cycleCenter}>
                 <span className={styles.cycleIcon}>🇮🇳</span>
@@ -239,11 +253,13 @@ export default function ElectionProcessMap() {
                 return (
                   <div
                     key={phase.id}
-                    className={`${styles.cyclePhase} ${activePhase === phase.id ? styles.cyclePhaseActive : ''}`}
-                    style={{
-                      transform: `translate(${x}px, ${y}px)`,
-                      '--phase-color': phase.color,
-                    } as React.CSSProperties}
+                    className={`${styles.cyclePhase} ${activePhase === phase.id ? styles.cyclePhaseActive : ""}`}
+                    style={
+                      {
+                        transform: `translate(${x}px, ${y}px)`,
+                        "--phase-color": phase.color,
+                      } as React.CSSProperties
+                    }
                     onClick={() => setActivePhase(phase.id)}
                   >
                     <span className={styles.cyclePhaseIcon}>{phase.icon}</span>
@@ -284,7 +300,10 @@ export default function ElectionProcessMap() {
         {/* Detail Panel */}
         <div className={styles.detailPanel}>
           {activePhaseData ? (
-            <div className={styles.phaseDetail} style={{ '--phase-color': activePhaseData.color } as React.CSSProperties}>
+            <div
+              className={styles.phaseDetail}
+              style={{ "--phase-color": activePhaseData.color } as React.CSSProperties}
+            >
               <div className={styles.detailHeader}>
                 <span className={styles.detailIcon}>{activePhaseData.icon}</span>
                 <h2 className={styles.detailTitle}>{activePhaseData.title}</h2>

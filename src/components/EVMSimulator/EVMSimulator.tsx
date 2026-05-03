@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /* ============================================================
    CivicIQ — 3D EVM + VVPAT Simulator
@@ -6,30 +6,30 @@
    Uses a Finite State Machine to guide users through polling day.
    ============================================================ */
 
-import { useState, useCallback } from 'react';
-import { EVM_STEPS } from '@/constants/evm';
-import type { EvmStep } from '@/types';
-import EVM3DModel from './EVM3DModel';
-import EVM2DModel from './EVM2DModel';
-import Certificate from '../Certificate/Certificate';
-import styles from './EVMSimulator.module.css';
+import { useState, useCallback } from "react";
+import { EVM_STEPS } from "@/constants/evm";
+import type { EvmStep } from "@/types";
+import EVM3DModel from "./EVM3DModel";
+import EVM2DModel from "./EVM2DModel";
+import Certificate from "../Certificate/Certificate";
+import styles from "./EVMSimulator.module.css";
 
 /** Step progression map */
 const NEXT_STEP: Record<EvmStep, EvmStep | null> = {
-  power_off: 'power_on',
-  power_on: 'voter_verification',
-  voter_verification: 'ballot_selection',
-  ballot_selection: 'vote_cast',
-  vote_cast: 'vvpat_slip',
-  vvpat_slip: 'confirmation',
+  power_off: "power_on",
+  power_on: "voter_verification",
+  voter_verification: "ballot_selection",
+  ballot_selection: "vote_cast",
+  vote_cast: "vvpat_slip",
+  vvpat_slip: "confirmation",
   confirmation: null,
 };
 
 export default function EVMSimulator() {
-  const [currentStep, setCurrentStep] = useState<EvmStep>('power_off');
+  const [currentStep, setCurrentStep] = useState<EvmStep>("power_off");
   const [selectedCandidate, setSelectedCandidate] = useState<number | null>(null);
   const [vvpatVisible, setVvpatVisible] = useState(false);
-  const [viewMode, setViewMode] = useState<'2D' | '3D'>('3D');
+  const [viewMode, setViewMode] = useState<"2D" | "3D">("3D");
 
   const stepInfo = EVM_STEPS.find((s) => s.step === currentStep)!;
   const stepIndex = EVM_STEPS.findIndex((s) => s.step === currentStep);
@@ -37,7 +37,7 @@ export default function EVMSimulator() {
   const advanceStep = useCallback(() => {
     const next = NEXT_STEP[currentStep];
     if (next) {
-      if (next === 'vvpat_slip') {
+      if (next === "vvpat_slip") {
         setVvpatVisible(true);
         // VVPAT slip visible for 7 seconds per spec
         setTimeout(() => setVvpatVisible(false), 7000);
@@ -51,7 +51,7 @@ export default function EVMSimulator() {
   }, []);
 
   const handleReset = useCallback(() => {
-    setCurrentStep('power_off');
+    setCurrentStep("power_off");
     setSelectedCandidate(null);
     setVvpatVisible(false);
   }, []);
@@ -65,14 +65,14 @@ export default function EVMSimulator() {
           <h2 className={styles.title}>EVM + VVPAT Simulator</h2>
           <div className={styles.viewToggle}>
             <button
-              className={`${styles.toggleBtn} ${viewMode === '2D' ? styles.toggleActive : ''}`}
-              onClick={() => setViewMode('2D')}
+              className={`${styles.toggleBtn} ${viewMode === "2D" ? styles.toggleActive : ""}`}
+              onClick={() => setViewMode("2D")}
             >
               2D View
             </button>
             <button
-              className={`${styles.toggleBtn} ${viewMode === '3D' ? styles.toggleActive : ''}`}
-              onClick={() => setViewMode('3D')}
+              className={`${styles.toggleBtn} ${viewMode === "3D" ? styles.toggleActive : ""}`}
+              onClick={() => setViewMode("3D")}
             >
               3D View
             </button>
@@ -95,7 +95,7 @@ export default function EVMSimulator() {
       <div className={styles.content}>
         {/* Left: Machine Visual (2D or 3D) */}
         <div className={styles.machineVisual}>
-          {viewMode === '3D' ? (
+          {viewMode === "3D" ? (
             <EVM3DModel
               currentStep={currentStep}
               selectedCandidate={selectedCandidate}
@@ -126,11 +126,11 @@ export default function EVMSimulator() {
           </div>
 
           {/* Certificate displayed on completion step */}
-          {currentStep === 'confirmation' && <Certificate />}
+          {currentStep === "confirmation" && <Certificate />}
 
           {/* Action Buttons */}
           <div className={styles.actions}>
-            {currentStep === 'ballot_selection' ? (
+            {currentStep === "ballot_selection" ? (
               <button
                 className={`${styles.actionButton} ${styles.actionPrimary}`}
                 onClick={advanceStep}
@@ -139,7 +139,7 @@ export default function EVMSimulator() {
               >
                 Confirm Selection
               </button>
-            ) : currentStep === 'confirmation' ? (
+            ) : currentStep === "confirmation" ? (
               <button
                 className={`${styles.actionButton} ${styles.actionSecondary}`}
                 onClick={handleReset}
@@ -153,7 +153,7 @@ export default function EVMSimulator() {
                 onClick={advanceStep}
                 id="evm-next-step"
               >
-                {currentStep === 'power_off' ? '⏻ Power On' : 'Next Step →'}
+                {currentStep === "power_off" ? "⏻ Power On" : "Next Step →"}
               </button>
             )}
           </div>
@@ -164,7 +164,11 @@ export default function EVMSimulator() {
               <div
                 key={s.step}
                 className={`${styles.stepDot} ${
-                  i < stepIndex ? styles.stepDotCompleted : i === stepIndex ? styles.stepDotCurrent : ''
+                  i < stepIndex
+                    ? styles.stepDotCompleted
+                    : i === stepIndex
+                      ? styles.stepDotCurrent
+                      : ""
                 }`}
                 title={s.title}
               />

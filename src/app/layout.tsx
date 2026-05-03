@@ -1,20 +1,20 @@
-import type { Metadata } from 'next';
-import './globals.css';
-import FirebaseAnalytics from '@/components/FirebaseAnalytics/FirebaseAnalytics';
-import ErrorBoundary from '@/components/ErrorBoundary/ErrorBoundary';
+import type { Metadata } from "next";
+import "./globals.css";
+import FirebaseAnalytics from "@/components/FirebaseAnalytics/FirebaseAnalytics";
+import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
 
 export const metadata: Metadata = {
-  title: 'CivicIQ — Multilingual Electoral Education Assistant',
+  title: "CivicIQ — Multilingual Electoral Education Assistant",
   description:
-    'CivicIQ helps voters understand the electoral process — voter registration, polling day procedures, and EVM/VVPAT voting — in 22 Indian languages with complete political neutrality.',
+    "CivicIQ helps voters understand the electoral process — voter registration, polling day procedures, and EVM/VVPAT voting — in 22 Indian languages with complete political neutrality.",
   keywords: [
-    'voter education',
-    'election process',
-    'EVM simulator',
-    'VVPAT',
-    'voter registration India',
-    'multilingual',
-    'civic education',
+    "voter education",
+    "election process",
+    "EVM simulator",
+    "VVPAT",
+    "voter registration India",
+    "multilingual",
+    "civic education",
   ],
 };
 

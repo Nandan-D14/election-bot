@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
 /* ============================================================
    Chatbot — Gemini-style conversational interface
    ============================================================ */
 
-import { useState, useRef, useEffect, useCallback } from 'react';
-import styles from './Chatbot.module.css';
+import { useState, useRef, useEffect, useCallback } from "react";
+import styles from "./Chatbot.module.css";
 
 interface Message {
   id: string;
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
   timestamp: Date;
 }
@@ -22,39 +22,42 @@ interface SuggestionChip {
 }
 
 const SUGGESTION_CHIPS: SuggestionChip[] = [
-  { id: '1', label: 'Write', icon: '✍️', prompt: 'Help me write something...' },
-  { id: '2', label: 'Learn', icon: '📚', prompt: 'I want to learn about...' },
-  { id: '3', label: 'Code', icon: '</>', prompt: 'Help me code...' },
-  { id: '4', label: 'Life stuff', icon: '🌟', prompt: 'I need advice on...' },
-  { id: '5', label: "Claude's choice", icon: '✨', prompt: 'Surprise me with something interesting!' },
+  {
+    id: "1",
+    label: "Voter Registration",
+    icon: "🗳️",
+    prompt: "How do I register to vote in India?",
+  },
+  { id: "2", label: "EVM Process", icon: "�️", prompt: "How does the EVM voting machine work?" },
+  { id: "3", label: "Voter ID", icon: "🆔", prompt: "How do I apply for a Voter ID card?" },
+  { id: "4", label: "Election Day", icon: "📅", prompt: "What should I bring on election day?" },
+  { id: "5", label: "Eligibility", icon: "✅", prompt: "Who is eligible to vote in India?" },
 ];
 
 const MODELS = [
-  { id: 'gemini 3.1 flash', name: 'gemini 3.1 flash 4.6', label: 'fast' },
-  { id: 'gemini 3 flash', name: 'gemini 3 flash', label: 'thinking' },
-  { id: 'gemini 3.1 pro', name: 'gemini 3.1 pro', label: 'high' },
+  { id: "gemini 3.1 flash", name: "gemini 3.1 flash 4.6", label: "fast" },
+  { id: "gemini 3 flash", name: "gemini 3 flash", label: "thinking" },
+  { id: "gemini 3.1 pro", name: "gemini 3.1 pro", label: "high" },
 ];
 
 export default function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedModel, setSelectedModel] = useState(MODELS[0]);
   const [showModelDropdown, setShowModelDropdown] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-
-
   // Auto-scroll to bottom
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   // Auto-resize textarea
   useEffect(() => {
     if (inputRef.current) {
-      inputRef.current.style.height = 'auto';
+      inputRef.current.style.height = "auto";
       inputRef.current.style.height = `${inputRef.current.scrollHeight}px`;
     }
   }, [inputValue]);
@@ -64,20 +67,20 @@ export default function Chatbot() {
 
     const userMessage: Message = {
       id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      role: 'user',
+      role: "user",
       content: inputValue.trim(),
       timestamp: new Date(),
     };
 
     const currentMessages = [...messages, userMessage];
     setMessages(currentMessages);
-    setInputValue('');
+    setInputValue("");
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           messages: currentMessages,
           model: selectedModel.id,
@@ -94,12 +97,12 @@ export default function Chatbot() {
         ...prev,
         {
           id: assistantMessageId,
-          role: 'assistant',
-          content: '',
+          role: "assistant",
+          content: "",
           timestamp: new Date(),
         },
       ]);
-      
+
       setIsLoading(false); // Typing indicator off, streaming starts
 
       if (response.body) {
@@ -114,22 +117,21 @@ export default function Chatbot() {
             const chunk = decoder.decode(value, { stream: true });
             setMessages((prev) =>
               prev.map((msg) =>
-                msg.id === assistantMessageId
-                  ? { ...msg, content: msg.content + chunk }
-                  : msg
+                msg.id === assistantMessageId ? { ...msg, content: msg.content + chunk } : msg
               )
             );
           }
         }
       }
     } catch (error) {
-      console.error('Error fetching chat response:', error);
+      console.error("Error fetching chat response:", error);
       setMessages((prev) => [
         ...prev,
         {
           id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-          role: 'assistant',
-          content: "Sorry, I'm having trouble connecting to my servers right now. Please try again later.",
+          role: "assistant",
+          content:
+            "Sorry, I'm having trouble connecting to my servers right now. Please try again later.",
           timestamp: new Date(),
         },
       ]);
@@ -138,7 +140,7 @@ export default function Chatbot() {
   }, [inputValue, isLoading, messages, selectedModel.id]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     }
@@ -157,12 +159,15 @@ export default function Chatbot() {
       {!hasMessages && (
         <div className={styles.welcomeSection}>
           <div className={styles.logo}>
-            <span className={styles.logoIcon}>✷</span>
+            <span className={styles.logoIcon}>🗳️</span>
             <h1 className={styles.logoText}>
-              <span className={styles.logoGemini}>GEMINI</span>
-              <span className={styles.logoReturns}>returns!</span>
+              <span className={styles.logoGemini}>CivicIQ</span>
+              <span className={styles.logoReturns}>Election Assistant</span>
             </h1>
           </div>
+          <p className={styles.welcomeSubtitle}>
+            Ask about voter registration, EVM voting, eligibility, and more
+          </p>
         </div>
       )}
 
@@ -173,11 +178,11 @@ export default function Chatbot() {
             <div
               key={message.id}
               className={`${styles.message} ${
-                message.role === 'user' ? styles.messageUser : styles.messageAssistant
+                message.role === "user" ? styles.messageUser : styles.messageAssistant
               }`}
             >
               <div className={styles.messageAvatar}>
-                {message.role === 'assistant' ? (
+                {message.role === "assistant" ? (
                   <span className={styles.assistantAvatar}>✷</span>
                 ) : (
                   <span className={styles.userAvatar}>U</span>
@@ -186,7 +191,7 @@ export default function Chatbot() {
               <div className={styles.messageContent}>
                 <p className={styles.messageText}>{message.content}</p>
                 <span className={styles.messageTime}>
-                  {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                 </span>
               </div>
             </div>
@@ -212,7 +217,14 @@ export default function Chatbot() {
         <div className={styles.inputContainer}>
           <div className={styles.inputWrapper}>
             <button className={styles.attachButton} aria-label="Attach file">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" />
               </svg>
             </button>
@@ -221,7 +233,7 @@ export default function Chatbot() {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder={hasMessages ? 'Message GEMINI...' : 'Type / for skills'}
+              placeholder={hasMessages ? "Message GEMINI..." : "Type / for skills"}
               className={styles.input}
               rows={1}
             />
@@ -235,7 +247,14 @@ export default function Chatbot() {
               >
                 <span className={styles.modelName}>{selectedModel.name}</span>
                 <span className={styles.modelLabel}>{selectedModel.label}</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
                   <path d="M6 9l6 6 6-6" />
                 </svg>
               </button>
@@ -245,7 +264,7 @@ export default function Chatbot() {
                     <button
                       key={model.id}
                       className={`${styles.modelOption} ${
-                        selectedModel.id === model.id ? styles.modelOptionActive : ''
+                        selectedModel.id === model.id ? styles.modelOptionActive : ""
                       }`}
                       onClick={() => {
                         setSelectedModel(model);
@@ -266,7 +285,14 @@ export default function Chatbot() {
               disabled={!inputValue.trim() || isLoading}
               aria-label="Send message"
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              >
                 <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
               </svg>
             </button>

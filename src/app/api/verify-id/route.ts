@@ -1,14 +1,14 @@
-import { GoogleGenerativeAI, Part } from '@google/generative-ai';
+import { GoogleGenerativeAI, Part } from "@google/generative-ai";
 
 const apiKey = process.env.GEMINI_API_KEY;
-const genAI = new GoogleGenerativeAI(apiKey || '');
+const genAI = new GoogleGenerativeAI(apiKey || "");
 
 export async function POST(req: Request) {
   try {
     if (!apiKey) {
-      return new Response(JSON.stringify({ error: 'Gemini API key not configured' }), {
+      return new Response(JSON.stringify({ error: "Gemini API key not configured" }), {
         status: 500,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       });
     }
 
@@ -16,13 +16,13 @@ export async function POST(req: Request) {
     const { frontImage, backImage } = body;
 
     if (!frontImage) {
-      return new Response(JSON.stringify({ error: 'Front image of voter ID is required' }), {
+      return new Response(JSON.stringify({ error: "Front image of voter ID is required" }), {
         status: 400,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       });
     }
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
 
     // Build parts array with images
     const parts: Part[] = [
@@ -71,8 +71,8 @@ Be thorough but fair. If the image is low quality, indicate that in the summary 
     ];
 
     // Add front image
-    const frontBase64 = frontImage.split(',')[1] || frontImage;
-    const frontMimeType = frontImage.match(/data:([^;]+);/)?.[1] || 'image/jpeg';
+    const frontBase64 = frontImage.split(",")[1] || frontImage;
+    const frontMimeType = frontImage.match(/data:([^;]+);/)?.[1] || "image/jpeg";
     parts.push({
       inlineData: {
         mimeType: frontMimeType,
@@ -82,9 +82,9 @@ Be thorough but fair. If the image is low quality, indicate that in the summary 
 
     // Add back image if provided
     if (backImage) {
-      parts.push({ text: '\n\nThis is the BACK side of the same voter ID card:' });
-      const backBase64 = backImage.split(',')[1] || backImage;
-      const backMimeType = backImage.match(/data:([^;]+);/)?.[1] || 'image/jpeg';
+      parts.push({ text: "\n\nThis is the BACK side of the same voter ID card:" });
+      const backBase64 = backImage.split(",")[1] || backImage;
+      const backMimeType = backImage.match(/data:([^;]+);/)?.[1] || "image/jpeg";
       parts.push({
         inlineData: {
           mimeType: backMimeType,
@@ -100,32 +100,32 @@ Be thorough but fair. If the image is low quality, indicate that in the summary 
     let verificationResult;
     try {
       // Remove any markdown code fences if present
-      const cleaned = responseText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      const cleaned = responseText
+        .replace(/```json\n?/g, "")
+        .replace(/```\n?/g, "")
+        .trim();
       verificationResult = JSON.parse(cleaned);
     } catch {
       // If parsing fails, return the raw text as summary
       verificationResult = {
-        status: 'UNREADABLE',
+        status: "UNREADABLE",
         confidence: 0,
         details: {},
         checks: [],
-        warnings: ['AI response could not be parsed into structured format.'],
+        warnings: ["AI response could not be parsed into structured format."],
         summary: responseText,
       };
     }
 
     return new Response(JSON.stringify(verificationResult), {
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
     });
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Verification failed';
-    console.error('Verify ID API Error:', error);
-    return new Response(
-      JSON.stringify({ error: errorMessage }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
+    const errorMessage = error instanceof Error ? error.message : "Verification failed";
+    console.error("Verify ID API Error:", error);
+    return new Response(JSON.stringify({ error: errorMessage }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 }

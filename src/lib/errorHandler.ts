@@ -9,7 +9,7 @@ export class AppError extends Error {
     public details?: unknown
   ) {
     super(message);
-    this.name = 'AppError';
+    this.name = "AppError";
     Error.captureStackTrace(this, this.constructor);
   }
 }
@@ -18,19 +18,19 @@ export class AppError extends Error {
  * Error types for different scenarios
  */
 export const ErrorCodes = {
-  NETWORK_ERROR: 'NETWORK_ERROR',
-  VALIDATION_ERROR: 'VALIDATION_ERROR',
-  AUTH_ERROR: 'AUTH_ERROR',
-  NOT_FOUND: 'NOT_FOUND',
-  RATE_LIMIT_EXCEEDED: 'RATE_LIMIT_EXCEEDED',
-  INTERNAL_ERROR: 'INTERNAL_ERROR',
+  NETWORK_ERROR: "NETWORK_ERROR",
+  VALIDATION_ERROR: "VALIDATION_ERROR",
+  AUTH_ERROR: "AUTH_ERROR",
+  NOT_FOUND: "NOT_FOUND",
+  RATE_LIMIT_EXCEEDED: "RATE_LIMIT_EXCEEDED",
+  INTERNAL_ERROR: "INTERNAL_ERROR",
 } as const;
 
 /**
  * Handle errors consistently across the application
  */
 export function handleError(error: unknown, context?: string): AppError {
-  console.error(`Error in ${context || 'application'}:`, error);
+  console.error(`Error in ${context || "application"}:`, error);
 
   // If it's already an AppError, return it
   if (error instanceof AppError) {
@@ -38,9 +38,9 @@ export function handleError(error: unknown, context?: string): AppError {
   }
 
   // Handle network errors
-  if (error instanceof TypeError && error.message.includes('fetch')) {
+  if (error instanceof TypeError && error.message.includes("fetch")) {
     return new AppError(
-      'Network connection failed. Please check your internet connection.',
+      "Network connection failed. Please check your internet connection.",
       ErrorCodes.NETWORK_ERROR,
       503
     );
@@ -49,18 +49,14 @@ export function handleError(error: unknown, context?: string): AppError {
   // Handle generic errors
   if (error instanceof Error) {
     return new AppError(
-      error.message || 'An unexpected error occurred',
+      error.message || "An unexpected error occurred",
       ErrorCodes.INTERNAL_ERROR,
       500
     );
   }
 
   // Handle unknown errors
-  return new AppError(
-    'An unexpected error occurred',
-    ErrorCodes.INTERNAL_ERROR,
-    500
-  );
+  return new AppError("An unexpected error occurred", ErrorCodes.INTERNAL_ERROR, 500);
 }
 
 /**
@@ -84,7 +80,7 @@ export async function withErrorHandling<T>(
  */
 export function logError(error: AppError, context?: string): void {
   // In production, this would send to a monitoring service like Sentry
-  console.error(`[${error.code}] ${context || 'Application'}:`, {
+  console.error(`[${error.code}] ${context || "Application"}:`, {
     message: error.message,
     statusCode: error.statusCode,
     details: error.details,

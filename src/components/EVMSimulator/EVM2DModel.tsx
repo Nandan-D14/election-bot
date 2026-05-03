@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
 /* ============================================================
    CivicIQ — 2D EVM + VVPAT Simulator
    HTML/CSS based representation of the EVM process.
    ============================================================ */
 
-import { EVM_STEPS, SIMULATED_CANDIDATES } from '@/constants/evm';
-import type { EvmStep } from '@/types';
-import styles from './EVMSimulator.module.css';
+import { EVM_STEPS, SIMULATED_CANDIDATES } from "@/constants/evm";
+import type { EvmStep } from "@/types";
+import styles from "./EVMSimulator.module.css";
 
 interface EVM2DModelProps {
   currentStep: EvmStep;
@@ -28,10 +28,12 @@ export default function EVM2DModel({
   return (
     <div className={styles.evmUnit}>
       {/* Control Unit */}
-      <div className={`${styles.controlUnit} ${currentStep !== 'power_off' ? styles.unitActive : ''}`}>
+      <div
+        className={`${styles.controlUnit} ${currentStep !== "power_off" ? styles.unitActive : ""}`}
+      >
         <div className={styles.unitLabel}>Control Unit</div>
         <div className={styles.unitScreen}>
-          {currentStep === 'power_off' ? (
+          {currentStep === "power_off" ? (
             <span className={styles.screenOff}>OFF</span>
           ) : (
             <div className={styles.screenContent}>
@@ -42,38 +44,46 @@ export default function EVM2DModel({
         </div>
         {/* LED Indicators */}
         <div className={styles.leds}>
-          <div className={`${styles.led} ${currentStep !== 'power_off' ? styles.ledGreen : ''}`} />
-          <div className={`${styles.led} ${currentStep === 'ballot_selection' ? styles.ledAmber : ''}`} />
-          <div className={`${styles.led} ${currentStep === 'vote_cast' || currentStep === 'confirmation' ? styles.ledBlue : ''}`} />
+          <div className={`${styles.led} ${currentStep !== "power_off" ? styles.ledGreen : ""}`} />
+          <div
+            className={`${styles.led} ${currentStep === "ballot_selection" ? styles.ledAmber : ""}`}
+          />
+          <div
+            className={`${styles.led} ${currentStep === "vote_cast" || currentStep === "confirmation" ? styles.ledBlue : ""}`}
+          />
         </div>
       </div>
 
       {/* Ballot Unit */}
-      <div className={`${styles.ballotUnit} ${currentStep === 'ballot_selection' ? styles.ballotActive : ''}`}>
+      <div
+        className={`${styles.ballotUnit} ${currentStep === "ballot_selection" ? styles.ballotActive : ""}`}
+      >
         <div className={styles.unitLabel}>Ballot Unit</div>
         <div className={styles.candidateList}>
           {SIMULATED_CANDIDATES.map((c) => (
             <button
               key={c.id}
-              className={`${styles.candidateRow} ${selectedCandidate === c.id ? styles.candidateSelected : ''}`}
+              className={`${styles.candidateRow} ${selectedCandidate === c.id ? styles.candidateSelected : ""}`}
               onClick={() => {
-                if (currentStep === 'ballot_selection') {
+                if (currentStep === "ballot_selection") {
                   onCandidateSelect(c.id);
                 }
               }}
-              disabled={currentStep !== 'ballot_selection'}
+              disabled={currentStep !== "ballot_selection"}
               aria-label={`Select ${c.label}`}
             >
               <span className={styles.candidateSymbol}>{c.symbol}</span>
               <span className={styles.candidateName}>{c.label}</span>
-              <div className={`${styles.voteButton} ${selectedCandidate === c.id ? styles.voteButtonPressed : ''}`} />
+              <div
+                className={`${styles.voteButton} ${selectedCandidate === c.id ? styles.voteButtonPressed : ""}`}
+              />
             </button>
           ))}
         </div>
       </div>
 
       {/* VVPAT Unit */}
-      <div className={`${styles.vvpatUnit} ${vvpatVisible ? styles.vvpatActive : ''}`}>
+      <div className={`${styles.vvpatUnit} ${vvpatVisible ? styles.vvpatActive : ""}`}>
         <div className={styles.unitLabel}>VVPAT</div>
         <div className={styles.vvpatWindow}>
           {vvpatVisible && selectedCandidate ? (

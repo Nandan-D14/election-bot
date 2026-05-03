@@ -1,20 +1,20 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Create an instance of the Google Generative AI client
 const apiKey = process.env.GEMINI_API_KEY;
-const genAI = new GoogleGenerativeAI(apiKey || '');
+const genAI = new GoogleGenerativeAI(apiKey || "");
 
 interface ChatMessage {
-  role: 'user' | 'assistant' | 'model';
+  role: "user" | "assistant" | "model";
   content: string;
 }
 
 export async function POST(req: Request) {
   try {
     if (!apiKey) {
-      return new Response(JSON.stringify({ error: 'Gemini API key not configured' }), {
+      return new Response(JSON.stringify({ error: "Gemini API key not configured" }), {
         status: 500,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       });
     }
 
@@ -22,27 +22,28 @@ export async function POST(req: Request) {
     const { messages }: { messages: ChatMessage[] } = body;
 
     if (!messages || !Array.isArray(messages)) {
-      return new Response(JSON.stringify({ error: 'Invalid messages array' }), {
+      return new Response(JSON.stringify({ error: "Invalid messages array" }), {
         status: 400,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       });
     }
 
     // Format history for Gemini
     // Gemini uses "user" and "model" as roles
     const history = messages.slice(0, -1).map((msg) => ({
-      role: msg.role === 'user' ? 'user' : 'model',
+      role: msg.role === "user" ? "user" : "model",
       parts: [{ text: msg.content }],
     }));
 
     const latestMessage = messages[messages.length - 1];
 
-    const modelName = body.model === 'haiku' ? 'gemini-1.5-flash' : 'gemini-1.5-pro';
+    const modelName = body.model === "haiku" ? "gemini-1.5-flash" : "gemini-1.5-pro";
     const model = genAI.getGenerativeModel({ model: modelName });
 
     const chat = model.startChat({
       history,
-      systemInstruction: 'You are a helpful, knowledgeable, and neutral Electoral Process Assistant. Explain the election lifecycle, voter eligibility, and polling procedures accurately and neutrally. Respond in the language of the user.',
+      systemInstruction:
+        "You are a helpful, knowledgeable, and neutral Electoral Process Assistant. Explain the election lifecycle, voter eligibility, and polling procedures accurately and neutrally. Respond in the language of the user.",
     });
 
     const result = await chat.sendMessageStream(latestMessage.content);
@@ -57,7 +58,7 @@ export async function POST(req: Request) {
           }
           controller.close();
         } catch (error) {
-          console.error('Error streaming Gemini response:', error);
+          console.error("Error streaming Gemini response:", error);
           controller.error(error);
         }
       },
@@ -65,16 +66,16 @@ export async function POST(req: Request) {
 
     return new Response(stream, {
       headers: {
-        'Content-Type': 'text/plain; charset=utf-8',
-        'Transfer-Encoding': 'chunked',
+        "Content-Type": "text/plain; charset=utf-8",
+        "Transfer-Encoding": "chunked",
       },
     });
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Something went wrong';
-    console.error('Chat API Error:', error);
+    const errorMessage = error instanceof Error ? error.message : "Something went wrong";
+    console.error("Chat API Error:", error);
     return new Response(JSON.stringify({ error: errorMessage }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
     });
   }
 }

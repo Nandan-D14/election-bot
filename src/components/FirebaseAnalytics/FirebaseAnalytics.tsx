@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { analytics, app } from '@/lib/firebase';
-import { getAnalytics, isSupported } from 'firebase/analytics';
+import { useEffect } from "react";
+import { analytics, app } from "@/lib/firebase";
+import { getAnalytics, isSupported } from "firebase/analytics";
 
 /**
  * Firebase Analytics Component
@@ -13,7 +13,7 @@ export default function FirebaseAnalytics() {
   useEffect(() => {
     // If analytics is already initialized in lib/firebase.ts, we're good
     if (analytics) {
-      console.log('Firebase Analytics already active');
+      console.log("Firebase Analytics already active");
       return;
     }
 
@@ -21,21 +21,23 @@ export default function FirebaseAnalytics() {
     // as a fallback for the async initialization in lib/firebase.ts
     const currentApp = app;
     if (currentApp) {
-      isSupported().then(supported => {
-        if (supported) {
-          try {
-            getAnalytics(currentApp);
-            console.log('Firebase Analytics initialized on mount');
-          } catch (error) {
-            // Silence storage access errors in restricted contexts
-            if (error instanceof Error && error.message.includes('storage')) {
-              console.warn('Firebase Analytics: Storage access restricted.');
-            } else {
-              console.warn('Firebase Analytics initialization failed:', error);
+      isSupported()
+        .then((supported) => {
+          if (supported) {
+            try {
+              getAnalytics(currentApp);
+              console.log("Firebase Analytics initialized on mount");
+            } catch (error) {
+              // Silence storage access errors in restricted contexts
+              if (error instanceof Error && error.message.includes("storage")) {
+                console.warn("Firebase Analytics: Storage access restricted.");
+              } else {
+                console.warn("Firebase Analytics initialization failed:", error);
+              }
             }
           }
-        }
-      }).catch(() => {});
+        })
+        .catch(() => {});
     }
   }, []);
 

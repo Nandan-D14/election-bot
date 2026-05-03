@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, RoundedBox, ContactShadows, Float, Html } from '@react-three/drei';
-import * as THREE from 'three';
-import { SIMULATED_CANDIDATES } from '@/constants/evm';
-import type { EvmStep } from '@/types';
+import { Suspense } from "react";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, RoundedBox, ContactShadows, Float, Html } from "@react-three/drei";
+import * as THREE from "three";
+import { SIMULATED_CANDIDATES } from "@/constants/evm";
+import type { EvmStep } from "@/types";
 
 interface EVM3DModelProps {
   currentStep: EvmStep;
@@ -19,19 +19,19 @@ interface EVM3DModelProps {
 // Common Materials
 // --------------------------------------------------------
 const plasticMaterial = new THREE.MeshStandardMaterial({
-  color: '#e0e0e0',
+  color: "#e0e0e0",
   roughness: 0.6,
   metalness: 0.1,
 });
 
 const darkPlasticMaterial = new THREE.MeshStandardMaterial({
-  color: '#2a2a2a',
+  color: "#2a2a2a",
   roughness: 0.7,
   metalness: 0.2,
 });
 
 const glassMaterial = new THREE.MeshPhysicalMaterial({
-  color: '#ffffff',
+  color: "#ffffff",
   metalness: 0.1,
   roughness: 0.1,
   transmission: 0.9,
@@ -43,8 +43,14 @@ const glassMaterial = new THREE.MeshPhysicalMaterial({
 // --------------------------------------------------------
 // Control Unit Component
 // --------------------------------------------------------
-function ControlUnit({ currentStep, onAdvanceStep }: { currentStep: EvmStep, onAdvanceStep: () => void }) {
-  const isOff = currentStep === 'power_off';
+function ControlUnit({
+  currentStep,
+  onAdvanceStep,
+}: {
+  currentStep: EvmStep;
+  onAdvanceStep: () => void;
+}) {
+  const isOff = currentStep === "power_off";
 
   return (
     <group position={[-3.5, 0, 0]}>
@@ -56,12 +62,20 @@ function ControlUnit({ currentStep, onAdvanceStep }: { currentStep: EvmStep, onA
       {/* Screen area */}
       <mesh position={[0, 0.55, -1]}>
         <boxGeometry args={[2, 0.1, 1]} />
-        <meshStandardMaterial color={isOff ? '#111' : '#a1e4a1'} />
+        <meshStandardMaterial color={isOff ? "#111" : "#a1e4a1"} />
       </mesh>
       {!isOff && (
         <Html position={[0, 0.61, -1]} rotation={[-Math.PI / 2, 0, 0]} center transform>
-          <div style={{ color: 'black', fontWeight: 'bold', fontSize: '10px', whiteSpace: 'nowrap', userSelect: 'none' }}>
-            {currentStep === 'confirmation' ? 'VOTE RECORDED' : 'READY'}
+          <div
+            style={{
+              color: "black",
+              fontWeight: "bold",
+              fontSize: "10px",
+              whiteSpace: "nowrap",
+              userSelect: "none",
+            }}
+          >
+            {currentStep === "confirmation" ? "VOTE RECORDED" : "READY"}
           </div>
         </Html>
       )}
@@ -71,33 +85,43 @@ function ControlUnit({ currentStep, onAdvanceStep }: { currentStep: EvmStep, onA
         <mesh
           onClick={(e) => {
             e.stopPropagation();
-            if (currentStep === 'power_off') onAdvanceStep();
+            if (currentStep === "power_off") onAdvanceStep();
           }}
-          onPointerOver={() => document.body.style.cursor = 'pointer'}
-          onPointerOut={() => document.body.style.cursor = 'auto'}
+          onPointerOver={() => (document.body.style.cursor = "pointer")}
+          onPointerOut={() => (document.body.style.cursor = "auto")}
         >
           <cylinderGeometry args={[0.3, 0.3, 0.2, 32]} />
-          <meshStandardMaterial color={isOff ? '#cc0000' : '#00cc00'} />
+          <meshStandardMaterial color={isOff ? "#cc0000" : "#00cc00"} />
         </mesh>
         <Html position={[0, 0.15, 0]} rotation={[-Math.PI / 2, 0, 0]} center transform>
-          <div style={{ color: 'white', fontSize: '6px', fontWeight: 'bold', userSelect: 'none' }}>POWER</div>
+          <div style={{ color: "white", fontSize: "6px", fontWeight: "bold", userSelect: "none" }}>
+            POWER
+          </div>
         </Html>
       </group>
 
       {/* Status LEDs */}
       <mesh position={[-1, 0.51, 0.5]}>
         <cylinderGeometry args={[0.1, 0.1, 0.1, 16]} />
-        <meshStandardMaterial color={!isOff ? '#00ff00' : '#222'} emissive={!isOff ? '#00ff00' : '#000'} emissiveIntensity={0.5} />
+        <meshStandardMaterial
+          color={!isOff ? "#00ff00" : "#222"}
+          emissive={!isOff ? "#00ff00" : "#000"}
+          emissiveIntensity={0.5}
+        />
       </mesh>
       <mesh position={[1, 0.51, 0.5]}>
         <cylinderGeometry args={[0.1, 0.1, 0.1, 16]} />
-        <meshStandardMaterial color={currentStep === 'ballot_selection' ? '#ffaa00' : '#222'} emissive={currentStep === 'ballot_selection' ? '#ffaa00' : '#000'} emissiveIntensity={0.5} />
+        <meshStandardMaterial
+          color={currentStep === "ballot_selection" ? "#ffaa00" : "#222"}
+          emissive={currentStep === "ballot_selection" ? "#ffaa00" : "#000"}
+          emissiveIntensity={0.5}
+        />
       </mesh>
       <Html position={[-1, 0.52, 0.8]} rotation={[-Math.PI / 2, 0, 0]} center transform>
-        <div style={{ color: 'black', fontSize: '5px', userSelect: 'none' }}>ON</div>
+        <div style={{ color: "black", fontSize: "5px", userSelect: "none" }}>ON</div>
       </Html>
       <Html position={[1, 0.52, 0.8]} rotation={[-Math.PI / 2, 0, 0]} center transform>
-        <div style={{ color: 'black', fontSize: '5px', userSelect: 'none' }}>BUSY</div>
+        <div style={{ color: "black", fontSize: "5px", userSelect: "none" }}>BUSY</div>
       </Html>
     </group>
   );
@@ -106,8 +130,18 @@ function ControlUnit({ currentStep, onAdvanceStep }: { currentStep: EvmStep, onA
 // --------------------------------------------------------
 // Ballot Unit Component
 // --------------------------------------------------------
-function BallotUnit({ currentStep, selectedCandidate, onCandidateSelect, onAdvanceStep }: { currentStep: EvmStep, selectedCandidate: number | null, onCandidateSelect: (id: number) => void, onAdvanceStep: () => void }) {
-  const isSelectionActive = currentStep === 'ballot_selection';
+function BallotUnit({
+  currentStep,
+  selectedCandidate,
+  onCandidateSelect,
+  onAdvanceStep,
+}: {
+  currentStep: EvmStep;
+  selectedCandidate: number | null;
+  onCandidateSelect: (id: number) => void;
+  onAdvanceStep: () => void;
+}) {
+  const isSelectionActive = currentStep === "ballot_selection";
 
   return (
     <group position={[0, 0, 0]}>
@@ -129,7 +163,19 @@ function BallotUnit({ currentStep, selectedCandidate, onCandidateSelect, onAdvan
             </mesh>
             {/* HTML label for crisp emoji/text rendering */}
             <Html position={[-1, 0.03, 0]} center transform rotation={[-Math.PI / 2, 0, 0]}>
-              <div style={{ background: 'white', padding: '2px 8px', fontSize: '12px', width: '120px', border: '1px solid #ccc', display: 'flex', alignItems: 'center', gap: '8px', color: 'black' }}>
+              <div
+                style={{
+                  background: "white",
+                  padding: "2px 8px",
+                  fontSize: "12px",
+                  width: "120px",
+                  border: "1px solid #ccc",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  color: "black",
+                }}
+              >
                 <span>{c.symbol}</span> <b>{c.label}</b>
               </div>
             </Html>
@@ -137,7 +183,11 @@ function BallotUnit({ currentStep, selectedCandidate, onCandidateSelect, onAdvan
             {/* LED Indicator next to button */}
             <mesh position={[0.7, 0, 0]}>
               <cylinderGeometry args={[0.08, 0.08, 0.1, 16]} />
-              <meshStandardMaterial color={isSelected ? '#ff0000' : '#222'} emissive={isSelected ? '#ff0000' : '#000'} emissiveIntensity={isSelected ? 1 : 0} />
+              <meshStandardMaterial
+                color={isSelected ? "#ff0000" : "#222"}
+                emissive={isSelected ? "#ff0000" : "#000"}
+                emissiveIntensity={isSelected ? 1 : 0}
+              />
             </mesh>
 
             {/* Blue Button */}
@@ -150,9 +200,9 @@ function BallotUnit({ currentStep, selectedCandidate, onCandidateSelect, onAdvan
                 }
               }}
               onPointerOver={() => {
-                if (isSelectionActive) document.body.style.cursor = 'pointer';
+                if (isSelectionActive) document.body.style.cursor = "pointer";
               }}
-              onPointerOut={() => document.body.style.cursor = 'auto'}
+              onPointerOut={() => (document.body.style.cursor = "auto")}
             >
               <cylinderGeometry args={[0.2, 0.2, 0.2, 32]} />
               <meshStandardMaterial color="#0055ff" roughness={0.4} />
@@ -162,10 +212,23 @@ function BallotUnit({ currentStep, selectedCandidate, onCandidateSelect, onAdvan
       })}
 
       {/* VOTE confirm button (simulated as being on the ballot unit for simpler UX or could just advance) */}
-      {currentStep === 'vote_cast' && (
+      {currentStep === "vote_cast" && (
         <Html position={[0, 1.5, 0]} center>
-          <div style={{ background: 'var(--color-accent-1)', padding: '8px 16px', borderRadius: '8px', color: 'white', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,0,0,0.3)', pointerEvents: 'auto' }}
-            onClick={(e) => { e.stopPropagation(); onAdvanceStep(); }}
+          <div
+            style={{
+              background: "var(--color-accent-1)",
+              padding: "8px 16px",
+              borderRadius: "8px",
+              color: "white",
+              fontWeight: "bold",
+              cursor: "pointer",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+              pointerEvents: "auto",
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              onAdvanceStep();
+            }}
           >
             CONFIRM VOTE
           </div>
@@ -178,8 +241,14 @@ function BallotUnit({ currentStep, selectedCandidate, onCandidateSelect, onAdvan
 // --------------------------------------------------------
 // VVPAT Component
 // --------------------------------------------------------
-function VvpatUnit({ vvpatVisible, selectedCandidate }: { vvpatVisible: boolean, selectedCandidate: number | null }) {
-  const candidate = SIMULATED_CANDIDATES.find(c => c.id === selectedCandidate);
+function VvpatUnit({
+  vvpatVisible,
+  selectedCandidate,
+}: {
+  vvpatVisible: boolean;
+  selectedCandidate: number | null;
+}) {
+  const candidate = SIMULATED_CANDIDATES.find((c) => c.id === selectedCandidate);
 
   return (
     <group position={[3.5, 0.5, -0.5]}>
@@ -206,9 +275,21 @@ function VvpatUnit({ vvpatVisible, selectedCandidate }: { vvpatVisible: boolean,
           <planeGeometry args={[1.2, 1.2]} />
           <meshBasicMaterial color="#ffffff" />
           <Html position={[0, 0, 0.01]} center transform>
-            <div style={{ width: '100px', height: '100px', background: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'black', border: '1px dashed #ccc' }}>
-              <div style={{ fontSize: '32px' }}>{candidate.symbol}</div>
-              <div style={{ fontSize: '12px', fontWeight: 'bold' }}>{candidate.label}</div>
+            <div
+              style={{
+                width: "100px",
+                height: "100px",
+                background: "white",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "black",
+                border: "1px dashed #ccc",
+              }}
+            >
+              <div style={{ fontSize: "32px" }}>{candidate.symbol}</div>
+              <div style={{ fontSize: "12px", fontWeight: "bold" }}>{candidate.label}</div>
             </div>
           </Html>
         </mesh>
@@ -220,39 +301,85 @@ function VvpatUnit({ vvpatVisible, selectedCandidate }: { vvpatVisible: boolean,
 // --------------------------------------------------------
 // Main Export
 // --------------------------------------------------------
-export default function EVM3DModel({ currentStep, selectedCandidate, vvpatVisible, onCandidateSelect, onAdvanceStep }: EVM3DModelProps) {
+export default function EVM3DModel({
+  currentStep,
+  selectedCandidate,
+  vvpatVisible,
+  onCandidateSelect,
+  onAdvanceStep,
+}: EVM3DModelProps) {
   return (
-    <div style={{ width: '100%', height: '100%', minHeight: '400px' }}>
+    <div style={{ width: "100%", height: "100%", minHeight: "400px" }}>
       <Canvas camera={{ position: [0, 6, 8], fov: 45 }}>
-        <Suspense fallback={<Html center><div style={{ color: 'white' }}>Loading 3D Scene...</div></Html>}>
-          <color attach="background" args={['#0a0a1a']} />
+        <Suspense
+          fallback={
+            <Html center>
+              <div style={{ color: "white" }}>Loading 3D Scene...</div>
+            </Html>
+          }
+        >
+          <color attach="background" args={["#0a0a1a"]} />
           {/* We make background transparent via CSS if we want, but explicit color helps 3D rendering */}
           <ambientLight intensity={1.5} />
           <directionalLight position={[10, 10, 5]} intensity={2} castShadow />
           <pointLight position={[-10, 5, -10]} intensity={1} />
-          
+
           {/* Removed Environment preset="city" to avoid external fetch errors */}
 
           <Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.2}>
             <group position={[0, -0.5, 0]}>
               <ControlUnit currentStep={currentStep} onAdvanceStep={onAdvanceStep} />
-              <BallotUnit currentStep={currentStep} selectedCandidate={selectedCandidate} onCandidateSelect={onCandidateSelect} onAdvanceStep={onAdvanceStep} />
+              <BallotUnit
+                currentStep={currentStep}
+                selectedCandidate={selectedCandidate}
+                onCandidateSelect={onCandidateSelect}
+                onAdvanceStep={onAdvanceStep}
+              />
               <VvpatUnit vvpatVisible={vvpatVisible} selectedCandidate={selectedCandidate} />
 
               {/* Cables */}
               <mesh position={[-1.8, 0.2, -1]}>
-                 <tubeGeometry args={[new THREE.CatmullRomCurve3([new THREE.Vector3(0,0,0), new THREE.Vector3(-1.7, -0.2, 1)]), 20, 0.05, 8, false]} />
-                 <meshStandardMaterial color="#222" />
+                <tubeGeometry
+                  args={[
+                    new THREE.CatmullRomCurve3([
+                      new THREE.Vector3(0, 0, 0),
+                      new THREE.Vector3(-1.7, -0.2, 1),
+                    ]),
+                    20,
+                    0.05,
+                    8,
+                    false,
+                  ]}
+                />
+                <meshStandardMaterial color="#222" />
               </mesh>
               <mesh position={[1.8, 0.2, -1]}>
-                 <tubeGeometry args={[new THREE.CatmullRomCurve3([new THREE.Vector3(0,0,0), new THREE.Vector3(1.7, 0, 0.5)]), 20, 0.05, 8, false]} />
-                 <meshStandardMaterial color="#222" />
+                <tubeGeometry
+                  args={[
+                    new THREE.CatmullRomCurve3([
+                      new THREE.Vector3(0, 0, 0),
+                      new THREE.Vector3(1.7, 0, 0.5),
+                    ]),
+                    20,
+                    0.05,
+                    8,
+                    false,
+                  ]}
+                />
+                <meshStandardMaterial color="#222" />
               </mesh>
             </group>
           </Float>
 
           <ContactShadows position={[0, -1, 0]} opacity={0.5} scale={15} blur={1.5} far={4.5} />
-          <OrbitControls makeDefault minPolarAngle={Math.PI / 4} maxPolarAngle={Math.PI / 2.2} enableZoom={true} minDistance={4} maxDistance={15} />
+          <OrbitControls
+            makeDefault
+            minPolarAngle={Math.PI / 4}
+            maxPolarAngle={Math.PI / 2.2}
+            enableZoom={true}
+            minDistance={4}
+            maxDistance={15}
+          />
         </Suspense>
       </Canvas>
     </div>

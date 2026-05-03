@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
 /* ============================================================
    ElectionMindMap — Interactive Concept Map
    Visual knowledge map of election-related concepts
    ============================================================ */
 
-import { useState } from 'react';
-import styles from './ElectionMindMap.module.css';
+import { useState } from "react";
+import styles from "./ElectionMindMap.module.css";
 
 interface MindNode {
   id: string;
   label: string;
   icon: string;
-  category: 'core' | 'process' | 'actors' | 'rights' | 'tech';
+  category: "core" | "process" | "actors" | "rights" | "tech";
   description: string;
   related: string[];
   x: number;
@@ -22,253 +22,253 @@ interface MindNode {
 const MIND_NODES: MindNode[] = [
   // Core
   {
-    id: 'election',
-    label: 'Election',
-    icon: '🗳️',
-    category: 'core',
-    description: 'The formal process of choosing representatives through voting',
-    related: ['eci', 'voter', 'candidate', 'evm', 'result'],
+    id: "election",
+    label: "Election",
+    icon: "🗳️",
+    category: "core",
+    description: "The formal process of choosing representatives through voting",
+    related: ["eci", "voter", "candidate", "evm", "result"],
     x: 50,
     y: 50,
   },
   {
-    id: 'eci',
-    label: 'Election Commission',
-    icon: '🏛️',
-    category: 'core',
-    description: 'Constitutional body conducting free and fair elections in India',
-    related: ['election', 'evm', 'observer', 'mcc'],
+    id: "eci",
+    label: "Election Commission",
+    icon: "🏛️",
+    category: "core",
+    description: "Constitutional body conducting free and fair elections in India",
+    related: ["election", "evm", "observer", "mcc"],
     x: 25,
     y: 25,
   },
   {
-    id: 'constitution',
-    label: 'Constitution',
-    icon: '📜',
-    category: 'core',
-    description: 'Article 324 vests superintendence of elections in ECI',
-    related: ['eci', 'rights', 'laws'],
+    id: "constitution",
+    label: "Constitution",
+    icon: "📜",
+    category: "core",
+    description: "Article 324 vests superintendence of elections in ECI",
+    related: ["eci", "rights", "laws"],
     x: 15,
     y: 50,
   },
 
   // Process
   {
-    id: 'registration',
-    label: 'Registration',
-    icon: '📝',
-    category: 'process',
-    description: 'Process of enrolling eligible citizens as voters',
-    related: ['voter', 'epic', 'form6', 'ero'],
+    id: "registration",
+    label: "Registration",
+    icon: "📝",
+    category: "process",
+    description: "Process of enrolling eligible citizens as voters",
+    related: ["voter", "epic", "form6", "ero"],
     x: 75,
     y: 25,
   },
   {
-    id: 'campaign',
-    label: 'Campaign',
-    icon: '📣',
-    category: 'process',
-    description: 'Period when candidates seek votes from electorate',
-    related: ['candidate', 'mcc', 'expenses', 'manifesto'],
+    id: "campaign",
+    label: "Campaign",
+    icon: "📣",
+    category: "process",
+    description: "Period when candidates seek votes from electorate",
+    related: ["candidate", "mcc", "expenses", "manifesto"],
     x: 80,
     y: 50,
   },
   {
-    id: 'polling',
-    label: 'Polling',
-    icon: '🏫',
-    category: 'process',
-    description: 'Day when registered voters cast their votes',
-    related: ['election', 'voter', 'evm', 'vvpat', 'official'],
+    id: "polling",
+    label: "Polling",
+    icon: "🏫",
+    category: "process",
+    description: "Day when registered voters cast their votes",
+    related: ["election", "voter", "evm", "vvpat", "official"],
     x: 85,
     y: 75,
   },
   {
-    id: 'counting',
-    label: 'Counting',
-    icon: '📊',
-    category: 'process',
-    description: 'Process of tallying votes to determine winners',
-    related: ['polling', 'evm', 'result', 'observer'],
+    id: "counting",
+    label: "Counting",
+    icon: "📊",
+    category: "process",
+    description: "Process of tallying votes to determine winners",
+    related: ["polling", "evm", "result", "observer"],
     x: 70,
     y: 85,
   },
 
   // Actors
   {
-    id: 'voter',
-    label: 'Voter',
-    icon: '👤',
-    category: 'actors',
-    description: 'Citizen aged 18+ registered to vote in elections',
-    related: ['registration', 'rights', 'polling', 'epic'],
+    id: "voter",
+    label: "Voter",
+    icon: "👤",
+    category: "actors",
+    description: "Citizen aged 18+ registered to vote in elections",
+    related: ["registration", "rights", "polling", "epic"],
     x: 50,
     y: 20,
   },
   {
-    id: 'candidate',
-    label: 'Candidate',
-    icon: '🎯',
-    category: 'actors',
-    description: 'Person contesting election for a position',
-    related: ['nomination', 'campaign', 'expenses', 'affidavit'],
+    id: "candidate",
+    label: "Candidate",
+    icon: "🎯",
+    category: "actors",
+    description: "Person contesting election for a position",
+    related: ["nomination", "campaign", "expenses", "affidavit"],
     x: 65,
     y: 35,
   },
   {
-    id: 'official',
-    label: 'Polling Official',
-    icon: '👮',
-    category: 'actors',
-    description: 'Government staff managing polling stations',
-    related: ['polling', 'evm', 'voter', 'form17'],
+    id: "official",
+    label: "Polling Official",
+    icon: "👮",
+    category: "actors",
+    description: "Government staff managing polling stations",
+    related: ["polling", "evm", "voter", "form17"],
     x: 35,
     y: 70,
   },
   {
-    id: 'observer',
-    label: 'Observer',
-    icon: '👁️',
-    category: 'actors',
-    description: 'ECI appointed official monitoring election fairness',
-    related: ['eci', 'counting', 'mcc', 'complaint'],
+    id: "observer",
+    label: "Observer",
+    icon: "👁️",
+    category: "actors",
+    description: "ECI appointed official monitoring election fairness",
+    related: ["eci", "counting", "mcc", "complaint"],
     x: 30,
     y: 80,
   },
 
   // Rights
   {
-    id: 'rights',
-    label: 'Voter Rights',
-    icon: '⚖️',
-    category: 'rights',
-    description: 'Fundamental rights of voters in democratic elections',
-    related: ['voter', 'nota', 'tender', 'complaint'],
+    id: "rights",
+    label: "Voter Rights",
+    icon: "⚖️",
+    category: "rights",
+    description: "Fundamental rights of voters in democratic elections",
+    related: ["voter", "nota", "tender", "complaint"],
     x: 20,
     y: 65,
   },
   {
-    id: 'nota',
-    label: 'NOTA',
-    icon: '✗',
-    category: 'rights',
-    description: 'None Of The Above - right to reject all candidates',
-    related: ['rights', 'evm', 'voter'],
+    id: "nota",
+    label: "NOTA",
+    icon: "✗",
+    category: "rights",
+    description: "None Of The Above - right to reject all candidates",
+    related: ["rights", "evm", "voter"],
     x: 15,
     y: 80,
   },
   {
-    id: 'tender',
-    label: 'Tender Vote',
-    icon: '📨',
-    category: 'rights',
-    description: 'Vote when someone else has already voted under your name',
-    related: ['rights', 'polling', 'complaint'],
+    id: "tender",
+    label: "Tender Vote",
+    icon: "📨",
+    category: "rights",
+    description: "Vote when someone else has already voted under your name",
+    related: ["rights", "polling", "complaint"],
     x: 10,
     y: 65,
   },
 
   // Tech
   {
-    id: 'evm',
-    label: 'EVM',
-    icon: '💻',
-    category: 'tech',
-    description: 'Electronic Voting Machine for casting votes electronically',
-    related: ['polling', 'vvpat', 'counting', 'eci'],
+    id: "evm",
+    label: "EVM",
+    icon: "💻",
+    category: "tech",
+    description: "Electronic Voting Machine for casting votes electronically",
+    related: ["polling", "vvpat", "counting", "eci"],
     x: 60,
     y: 65,
   },
   {
-    id: 'vvpat',
-    label: 'VVPAT',
-    icon: '🧾',
-    category: 'tech',
-    description: 'Voter Verifiable Paper Audit Trail for vote verification',
-    related: ['evm', 'polling', 'counting'],
+    id: "vvpat",
+    label: "VVPAT",
+    icon: "🧾",
+    category: "tech",
+    description: "Voter Verifiable Paper Audit Trail for vote verification",
+    related: ["evm", "polling", "counting"],
     x: 75,
     y: 60,
   },
   {
-    id: 'epic',
-    label: 'EPIC Card',
-    icon: '🪪',
-    category: 'tech',
-    description: 'Electoral Photo Identity Card - voter ID document',
-    related: ['voter', 'registration', 'polling'],
+    id: "epic",
+    label: "EPIC Card",
+    icon: "🪪",
+    category: "tech",
+    description: "Electoral Photo Identity Card - voter ID document",
+    related: ["voter", "registration", "polling"],
     x: 40,
     y: 30,
   },
   {
-    id: 'nvsp',
-    label: 'NVSP Portal',
-    icon: '🌐',
-    category: 'tech',
-    description: 'National Voters\' Services Portal for online services',
-    related: ['registration', 'voter', 'form6'],
+    id: "nvsp",
+    label: "NVSP Portal",
+    icon: "🌐",
+    category: "tech",
+    description: "National Voters' Services Portal for online services",
+    related: ["registration", "voter", "form6"],
     x: 90,
     y: 35,
   },
 
   // Additional nodes
   {
-    id: 'mcc',
-    label: 'MCC',
-    icon: '📋',
-    category: 'process',
-    description: 'Model Code of Conduct - guidelines for parties and candidates',
-    related: ['eci', 'campaign', 'candidate'],
+    id: "mcc",
+    label: "MCC",
+    icon: "📋",
+    category: "process",
+    description: "Model Code of Conduct - guidelines for parties and candidates",
+    related: ["eci", "campaign", "candidate"],
     x: 25,
     y: 40,
   },
   {
-    id: 'form6',
-    label: 'Form 6',
-    icon: '📄',
-    category: 'process',
-    description: 'Application form for new voter registration',
-    related: ['registration', 'nvsp', 'ero'],
+    id: "form6",
+    label: "Form 6",
+    icon: "📄",
+    category: "process",
+    description: "Application form for new voter registration",
+    related: ["registration", "nvsp", "ero"],
     x: 85,
     y: 15,
   },
   {
-    id: 'ero',
-    label: 'ERO',
-    icon: '🏢',
-    category: 'actors',
-    description: 'Electoral Registration Officer - verifies voter applications',
-    related: ['registration', 'form6', 'eci'],
+    id: "ero",
+    label: "ERO",
+    icon: "🏢",
+    category: "actors",
+    description: "Electoral Registration Officer - verifies voter applications",
+    related: ["registration", "form6", "eci"],
     x: 95,
     y: 20,
   },
   {
-    id: 'result',
-    label: 'Results',
-    icon: '🏆',
-    category: 'process',
-    description: 'Declaration of winning candidates after counting',
-    related: ['counting', 'election', 'gazette'],
+    id: "result",
+    label: "Results",
+    icon: "🏆",
+    category: "process",
+    description: "Declaration of winning candidates after counting",
+    related: ["counting", "election", "gazette"],
     x: 55,
     y: 85,
   },
   {
-    id: 'laws',
-    label: 'RPA 1951',
-    icon: '⚖️',
-    category: 'core',
-    description: 'Representation of the People Act - governs elections',
-    related: ['constitution', 'eci', 'offenses'],
+    id: "laws",
+    label: "RPA 1951",
+    icon: "⚖️",
+    category: "core",
+    description: "Representation of the People Act - governs elections",
+    related: ["constitution", "eci", "offenses"],
     x: 5,
     y: 40,
   },
 ];
 
 const CATEGORIES = {
-  core: { label: 'Core', color: '#ff6b6b' },
-  process: { label: 'Process', color: '#4facfe' },
-  actors: { label: 'Actors', color: '#43e97b' },
-  rights: { label: 'Rights', color: '#feca57' },
-  tech: { label: 'Technology', color: '#a78bfa' },
+  core: { label: "Core", color: "#ff6b6b" },
+  process: { label: "Process", color: "#4facfe" },
+  actors: { label: "Actors", color: "#43e97b" },
+  rights: { label: "Rights", color: "#feca57" },
+  tech: { label: "Technology", color: "#a78bfa" },
 };
 
 export default function ElectionMindMap() {
@@ -300,7 +300,7 @@ export default function ElectionMindMap() {
         <div className={styles.controls}>
           <div className={styles.categoryFilter}>
             <button
-              className={`${styles.filterBtn} ${filterCategory === null ? styles.filterActive : ''}`}
+              className={`${styles.filterBtn} ${filterCategory === null ? styles.filterActive : ""}`}
               onClick={() => setFilterCategory(null)}
             >
               All
@@ -308,9 +308,9 @@ export default function ElectionMindMap() {
             {Object.entries(CATEGORIES).map(([key, cat]) => (
               <button
                 key={key}
-                className={`${styles.filterBtn} ${filterCategory === key ? styles.filterActive : ''}`}
+                className={`${styles.filterBtn} ${filterCategory === key ? styles.filterActive : ""}`}
                 onClick={() => setFilterCategory(key)}
-                style={{ '--cat-color': cat.color } as React.CSSProperties}
+                style={{ "--cat-color": cat.color } as React.CSSProperties}
               >
                 {cat.label}
               </button>
@@ -318,10 +318,16 @@ export default function ElectionMindMap() {
           </div>
 
           <div className={styles.zoomControls}>
-            <button className={styles.zoomBtn} onClick={handleZoomOut}>−</button>
+            <button className={styles.zoomBtn} onClick={handleZoomOut}>
+              −
+            </button>
             <span className={styles.zoomLevel}>{Math.round(zoom * 100)}%</span>
-            <button className={styles.zoomBtn} onClick={handleZoomIn}>+</button>
-            <button className={styles.resetBtn} onClick={handleReset}>Reset</button>
+            <button className={styles.zoomBtn} onClick={handleZoomIn}>
+              +
+            </button>
+            <button className={styles.resetBtn} onClick={handleReset}>
+              Reset
+            </button>
           </div>
         </div>
       </div>
@@ -386,14 +392,16 @@ export default function ElectionMindMap() {
             return (
               <div
                 key={node.id}
-                className={`${styles.node} ${isActive ? styles.nodeActive : ''} ${
-                  isRelated ? styles.nodeRelated : ''
+                className={`${styles.node} ${isActive ? styles.nodeActive : ""} ${
+                  isRelated ? styles.nodeRelated : ""
                 }`}
-                style={{
-                  left: `${node.x}%`,
-                  top: `${node.y}%`,
-                  '--node-color': cat.color,
-                } as React.CSSProperties}
+                style={
+                  {
+                    left: `${node.x}%`,
+                    top: `${node.y}%`,
+                    "--node-color": cat.color,
+                  } as React.CSSProperties
+                }
                 onClick={() => setActiveNode(isActive ? null : node.id)}
               >
                 <div className={styles.nodeIcon}>{node.icon}</div>
@@ -407,11 +415,19 @@ export default function ElectionMindMap() {
         {/* Info Panel */}
         <div className={styles.infoPanel}>
           {activeNodeData ? (
-            <div className={styles.nodeInfo} style={{ '--node-color': CATEGORIES[activeNodeData.category].color } as React.CSSProperties}>
+            <div
+              className={styles.nodeInfo}
+              style={
+                { "--node-color": CATEGORIES[activeNodeData.category].color } as React.CSSProperties
+              }
+            >
               <div className={styles.infoHeader}>
                 <span className={styles.infoIcon}>{activeNodeData.icon}</span>
                 <h3 className={styles.infoTitle}>{activeNodeData.label}</h3>
-                <span className={styles.infoCategory} style={{ background: CATEGORIES[activeNodeData.category].color }}>
+                <span
+                  className={styles.infoCategory}
+                  style={{ background: CATEGORIES[activeNodeData.category].color }}
+                >
                   {CATEGORIES[activeNodeData.category].label}
                 </span>
               </div>
@@ -429,7 +445,11 @@ export default function ElectionMindMap() {
                           key={relatedId}
                           className={styles.relatedChip}
                           onClick={() => setActiveNode(relatedId)}
-                          style={{ '--chip-color': CATEGORIES[related.category].color } as React.CSSProperties}
+                          style={
+                            {
+                              "--chip-color": CATEGORIES[related.category].color,
+                            } as React.CSSProperties
+                          }
                         >
                           {related.icon} {related.label}
                         </button>

@@ -1,15 +1,26 @@
-'use client';
+"use client";
 
 /* ============================================================
    CivicIQ — Header Component
    Sticky glass header with logo, status indicator, and language selector.
    ============================================================ */
 
-import type { AudioState, LanguageTag } from '@/types';
-import LanguageSelector from '@/components/LanguageSelector/LanguageSelector';
-import styles from './Header.module.css';
+import type { AudioState, LanguageTag } from "@/types";
+import LanguageSelector from "@/components/LanguageSelector/LanguageSelector";
+import styles from "./Header.module.css";
 
-type NavView = 'assistant' | 'simulator' | 'quiz' | 'myths' | 'chatbot' | 'rules' | 'games' | 'processmap' | 'mindmap' | 'verifyid' | 'profile';
+type NavView =
+  | "assistant"
+  | "simulator"
+  | "quiz"
+  | "myths"
+  | "chatbot"
+  | "rules"
+  | "games"
+  | "processmap"
+  | "mindmap"
+  | "verifyid"
+  | "profile";
 
 interface HeaderProps {
   audioState: AudioState;
@@ -25,13 +36,20 @@ interface HeaderProps {
 }
 
 const STATE_LABELS: Record<AudioState, string> = {
-  idle: 'Ready',
-  listening: 'Listening...',
-  thinking: 'Processing...',
-  speaking: 'Speaking...',
+  idle: "Ready",
+  listening: "Listening...",
+  thinking: "Processing...",
+  speaking: "Speaking...",
 };
 
-export default function Header({ audioState, language, onLanguageChange, totalPoints, onProfileClick, nav }: HeaderProps) {
+export default function Header({
+  audioState,
+  language,
+  onLanguageChange,
+  totalPoints,
+  onProfileClick,
+  nav,
+}: HeaderProps) {
   return (
     <header className={styles.header} role="banner">
       <div className={styles.topRow}>
@@ -87,78 +105,78 @@ export default function Header({ audioState, language, onLanguageChange, totalPo
             </button>
             <div className={styles.tabs}>
               <button
-                className={`${styles.tab} ${nav.activeView === 'assistant' ? styles.tabActive : ''}`}
-                onClick={() => nav.onSelect('assistant')}
+                className={`${styles.tab} ${nav.activeView === "assistant" ? styles.tabActive : ""}`}
+                onClick={() => nav.onSelect("assistant")}
                 id="tab-assistant"
               >
                 💬 Assistant
               </button>
               <button
-                className={`${styles.tab} ${nav.activeView === 'simulator' ? styles.tabActive : ''}`}
-                onClick={() => nav.onSelect('simulator')}
+                className={`${styles.tab} ${nav.activeView === "simulator" ? styles.tabActive : ""}`}
+                onClick={() => nav.onSelect("simulator")}
                 id="tab-simulator"
               >
                 🗳️ Simulator
               </button>
               <button
-                className={`${styles.tab} ${nav.activeView === 'quiz' ? styles.tabActive : ''}`}
-                onClick={() => nav.onSelect('quiz')}
+                className={`${styles.tab} ${nav.activeView === "quiz" ? styles.tabActive : ""}`}
+                onClick={() => nav.onSelect("quiz")}
                 id="tab-quiz"
               >
                 📋 Check Eligibility
               </button>
               <button
-                className={`${styles.tab} ${nav.activeView === 'myths' ? styles.tabActive : ''}`}
-                onClick={() => nav.onSelect('myths')}
+                className={`${styles.tab} ${nav.activeView === "myths" ? styles.tabActive : ""}`}
+                onClick={() => nav.onSelect("myths")}
                 id="tab-myths"
               >
                 🛡️ Myth Buster
               </button>
               <button
-                className={`${styles.tab} ${nav.activeView === 'chatbot' ? styles.tabActive : ''}`}
-                onClick={() => nav.onSelect('chatbot')}
+                className={`${styles.tab} ${nav.activeView === "chatbot" ? styles.tabActive : ""}`}
+                onClick={() => nav.onSelect("chatbot")}
                 id="tab-chatbot"
               >
                 🤖 Chatbot
               </button>
               <button
-                className={`${styles.tab} ${nav.activeView === 'rules' ? styles.tabActive : ''}`}
-                onClick={() => nav.onSelect('rules')}
+                className={`${styles.tab} ${nav.activeView === "rules" ? styles.tabActive : ""}`}
+                onClick={() => nav.onSelect("rules")}
                 id="tab-rules"
               >
                 📜 Rules
               </button>
               <button
-                className={`${styles.tab} ${nav.activeView === 'verifyid' ? styles.tabActive : ''}`}
-                onClick={() => nav.onSelect('verifyid')}
+                className={`${styles.tab} ${nav.activeView === "verifyid" ? styles.tabActive : ""}`}
+                onClick={() => nav.onSelect("verifyid")}
                 id="tab-verifyid"
               >
                 🪪 Verify ID
               </button>
               <button
-                className={`${styles.tab} ${nav.activeView === 'games' ? styles.tabActive : ''}`}
-                onClick={() => nav.onSelect('games')}
+                className={`${styles.tab} ${nav.activeView === "games" ? styles.tabActive : ""}`}
+                onClick={() => nav.onSelect("games")}
                 id="tab-games"
               >
                 🎮 Games
               </button>
               <button
-                className={`${styles.tab} ${nav.activeView === 'processmap' ? styles.tabActive : ''}`}
-                onClick={() => nav.onSelect('processmap')}
+                className={`${styles.tab} ${nav.activeView === "processmap" ? styles.tabActive : ""}`}
+                onClick={() => nav.onSelect("processmap")}
                 id="tab-processmap"
               >
                 🗺️ Process
               </button>
               <button
-                className={`${styles.tab} ${nav.activeView === 'mindmap' ? styles.tabActive : ''}`}
-                onClick={() => nav.onSelect('mindmap')}
+                className={`${styles.tab} ${nav.activeView === "mindmap" ? styles.tabActive : ""}`}
+                onClick={() => nav.onSelect("mindmap")}
                 id="tab-mindmap"
               >
                 🧠 MindMap
               </button>
               <button
-                className={`${styles.tab} ${nav.activeView === 'profile' ? styles.tabActive : ''}`}
-                onClick={() => nav.onSelect('profile')}
+                className={`${styles.tab} ${nav.activeView === "profile" ? styles.tabActive : ""}`}
+                onClick={() => nav.onSelect("profile")}
                 id="tab-profile"
               >
                 👤 Profile

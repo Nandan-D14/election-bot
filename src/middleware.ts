@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 export function middleware() {
   const response = NextResponse.next();
@@ -6,15 +6,15 @@ export function middleware() {
   // Security Headers
   const securityHeaders = {
     // Prevent clickjacking attacks
-    'X-Frame-Options': 'DENY',
+    "X-Frame-Options": "DENY",
     // Prevent MIME type sniffing
-    'X-Content-Type-Options': 'nosniff',
+    "X-Content-Type-Options": "nosniff",
     // Enable XSS protection
-    'X-XSS-Protection': '1; mode=block',
+    "X-XSS-Protection": "1; mode=block",
     // Referrer policy
-    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    "Referrer-Policy": "strict-origin-when-cross-origin",
     // Permissions policy (formerly Feature-Policy)
-    'Permissions-Policy': 'camera=(), microphone=(self), geolocation=()',
+    "Permissions-Policy": "camera=(), microphone=(self), geolocation=()",
   };
 
   // Apply security headers
@@ -48,15 +48,15 @@ export function middleware() {
     "frame-ancestors 'none'",
     // Upgrade insecure requests
     "upgrade-insecure-requests",
-  ].join('; ');
+  ].join("; ");
 
-  response.headers.set('Content-Security-Policy', cspHeader);
+  response.headers.set("Content-Security-Policy", cspHeader);
 
   // Strict-Transport-Security (only in production)
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === "production") {
     response.headers.set(
-      'Strict-Transport-Security',
-      'max-age=31536000; includeSubDomains; preload'
+      "Strict-Transport-Security",
+      "max-age=31536000; includeSubDomains; preload"
     );
   }
 
@@ -73,6 +73,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - public files
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|public).*)',
+    "/((?!api|_next/static|_next/image|favicon.ico|public).*)",
   ],
 };

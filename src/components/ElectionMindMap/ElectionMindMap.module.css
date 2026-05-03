@@ -203,7 +203,8 @@
 }
 
 @keyframes pulseNode {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 0 0 var(--node-color);
   }
   50% {

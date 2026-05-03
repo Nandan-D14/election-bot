@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  output: 'standalone',
+  output: "standalone",
   turbopack: {
     root: __dirname,
   },
@@ -10,12 +10,12 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'fonts.googleapis.com',
+        protocol: "https",
+        hostname: "fonts.googleapis.com",
       },
       {
-        protocol: 'https',
-        hostname: 'fonts.gstatic.com',
+        protocol: "https",
+        hostname: "fonts.gstatic.com",
       },
     ],
   },
@@ -23,11 +23,11 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: '/:path*',
+        source: "/:path*",
         headers: [
           {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on'
+            key: "X-DNS-Prefetch-Control",
+            value: "on",
           },
         ],
       },

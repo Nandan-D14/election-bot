@@ -88,7 +88,12 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--color-accent-1), var(--color-accent-2), var(--color-accent-3));
+  background: linear-gradient(
+    90deg,
+    var(--color-accent-1),
+    var(--color-accent-2),
+    var(--color-accent-3)
+  );
   border-radius: 2px;
   transform: translateY(-50%);
 }

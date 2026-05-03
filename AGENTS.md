@@ -26,19 +26,23 @@
 ## Frontend (Next.js) requirements
 
 ### UI: “Liquid Glass”
+
 - Heavy glassmorphism: translucent cards, **strong backdrop-blur**, high-saturation gradient mesh background.
 - Apple-native aesthetic: large radii, subtle borders, depth shadows, soft highlights.
 - Motion: slow parallax mesh background + micro-interactions on controls.
 
 ### Audio capture (WebRTC/MediaRecorder)
+
 - Capture microphone audio via `navigator.mediaDevices.getUserMedia({ audio: true })`.
 - Record using `MediaRecorder` **or** process raw PCM via WebAudio for lower latency.
 - Stream audio to backend continuously (chunked) while user speaks.
 
 **Recommended low-latency path**
+
 - Use WebAudio (`AudioWorklet` or `ScriptProcessor` fallback) to produce **16-bit PCM, 16kHz, little-endian** chunks, because Gemini Live commonly expects that for realtime audio input.
 
 ### Language selector (22 scheduled Indian languages)
+
 Dropdown must include the Eighth Schedule languages (22). Use BCP‑47 language tags that are widely supported:
 
 - Assamese — `as-IN`
@@ -65,26 +69,33 @@ Dropdown must include the Eighth Schedule languages (22). Use BCP‑47 language 
 - Urdu — `ur-IN`
 
 Notes:
+
 - Keep a separate internal mapping layer so you can adjust tags per provider without changing UI labels.
 - The Live API can be instructed to **restrict output language** via system instructions even if the model can code-switch.
 
 ### Streaming UI: audio buffer + translated text simultaneously
+
 During response streaming:
+
 - Play streamed audio (buffered) as it arrives.
 - Render text transcript incrementally (model output transcription).
 
 UI must show:
+
 - **Input transcript** (optional, live STT)
 - **Output transcript** (live)
 - **Audio state** (listening / thinking / speaking)
 
 ### 3D EVM + VVPAT simulator (Three.js)
+
 Interactive model that:
+
 - Renders EVM unit(s) and VVPAT with “glass” UI overlays.
 - Allows clicking buttons.
 - Procedurally guides the **full polling day sequence** in steps (chronological).
 
 Minimum interactions:
+
 - Power on / readiness
 - Voter verification step
 - Ballot unit selection
@@ -93,6 +104,7 @@ Minimum interactions:
 - Final confirmation / next voter
 
 Implementation notes:
+
 - Use `three` + `@react-three/fiber` + `@react-three/drei`.
 - Make each control a mesh with hit-testing; on click, advance a finite-state machine (FSM) representing the procedure.
 - The simulator should be educational, not “gamey”; present neutral instructions.
@@ -104,10 +116,12 @@ Implementation notes:
 ### High-level architecture
 
 **Runtime split**
+
 - **Frontend**: captures audio and talks to backend via WebSocket/SSE.
 - **Backend**: holds API keys, performs RAG + ADK routing, and proxies streaming to/from Gemini Live.
 
 **Core services**
+
 - `LiveSessionService`: manages Gemini Live WebSocket session.
 - `RagService`: vector DB retrieval (jurisdiction-specific docs, procedures, FAQs).
 - `AgentOrchestrator`: ADK multi-agent system (router + specialists).
@@ -116,6 +130,7 @@ Implementation notes:
 ### Multi-agent architecture (ADK)
 
 Agents:
+
 - **Router Agent**
   - Classifies intent (registration vs polling-day procedure vs general lifecycle).
   - Outputs `{ intent, confidence, required_slots }`.
@@ -125,6 +140,7 @@ Agents:
   - Booth location guidance (from RAG), polling-day rules, EVM/VVPAT procedure, do’s/don’ts.
 
 All agents share the same **system prompt** (see below) and must:
+
 - use retrieved context snippets
 - produce numbered steps for procedures
 - keep short sentences
@@ -155,12 +171,14 @@ All agents share the same **system prompt** (see below) and must:
 Use a single WebSocket between frontend and backend.
 
 **Client → Server**
+
 - `session.start`: `{ languageTag, uiContext?, jurisdiction?, consent }`
 - `audio.chunk`: `{ mimeType: "audio/pcm;rate=16000", dataB64 }`
 - `audio.end`: `{}` (user stopped speaking)
 - `session.stop`: `{}`
 
 **Server → Client**
+
 - `stt.delta`: `{ text, isFinal? }`
 - `tts.audio`: `{ mimeType: "audio/pcm;rate=24000", dataB64 }`
 - `tts.delta`: `{ text, isFinal? }` (output transcript)
@@ -168,17 +186,20 @@ Use a single WebSocket between frontend and backend.
 - `error`: `{ code, message, retryable }`
 
 Notes:
+
 - Don’t assume strict ordering between audio and transcript messages; the Live API notes concurrent streams can be unordered.
 - The frontend should handle partials and re-render deltas.
 
 ### Gemini Live session configuration (key points)
 
 When establishing the Live session:
+
 - Enable **output audio transcription** so you can show text while audio plays.
 - Optionally enable **input audio transcription** for live captions.
 - Use system instruction to **force response language** to match the user’s language selection.
 
 Implementation detail:
+
 - Gemini Live is a **stateful WebSocket** session. You send an initial setup message, then stream realtime audio messages, and receive server events containing audio + transcription.
 
 ---
@@ -186,11 +207,13 @@ Implementation detail:
 ## RAG (Vector DB) requirements
 
 ### Data sources (examples)
+
 - Official election commission procedures, voter guides, polling-day instructions.
 - “How to register”, “How to correct details”, “What to bring”, “Do’s and don’ts”.
 - EVM/VVPAT educational material.
 
 ### Retrieval policy
+
 - Retrieve top‑K snippets with citations/IDs.
 - Include those snippets (or a compressed citation form) in the specialist agent’s context.
 - If retrieval yields insufficient coverage, the agent must say:
@@ -218,6 +241,7 @@ Rules:
 ---
 
 ## Security + privacy
+
 - Never expose long-lived API keys to the browser.
 - Prefer ephemeral credentials if enabling client-direct Live connections; otherwise proxy through backend.
 - Audio is sensitive data: log only minimal metadata; avoid storing raw audio by default.
@@ -234,4 +258,3 @@ Rules:
 - Router selects between Registrar vs Polling Officer intents.
 - Specialist responses contain numbered steps and are grounded in RAG context.
 - 3D EVM + VVPAT simulator runs and supports a procedural polling-day sequence via clickable controls.
-

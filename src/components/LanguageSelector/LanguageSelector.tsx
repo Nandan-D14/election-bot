@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
 /* ============================================================
    CivicIQ — Language Selector Component
    A premium glass-styled dropdown for 22 Indian languages.
    ============================================================ */
 
-import { useState, useRef, useEffect } from 'react';
-import type { LanguageTag } from '@/types';
-import { LANGUAGES } from '@/constants/languages';
-import styles from './LanguageSelector.module.css';
+import { useState, useRef, useEffect } from "react";
+import type { LanguageTag } from "@/types";
+import { LANGUAGES } from "@/constants/languages";
+import styles from "./LanguageSelector.module.css";
 
 interface LanguageSelectorProps {
   value: LanguageTag;
@@ -17,7 +17,7 @@ interface LanguageSelectorProps {
 
 export default function LanguageSelector({ value, onChange }: LanguageSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
 
@@ -28,11 +28,11 @@ export default function LanguageSelector({ value, onChange }: LanguageSelectorPr
     function handleClickOutside(e: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setIsOpen(false);
-        setSearch('');
+        setSearch("");
       }
     }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   // Focus search on open
@@ -43,9 +43,7 @@ export default function LanguageSelector({ value, onChange }: LanguageSelectorPr
   }, [isOpen]);
 
   const filtered = LANGUAGES.filter(
-    (l) =>
-      l.labelEn.toLowerCase().includes(search.toLowerCase()) ||
-      l.label.includes(search)
+    (l) => l.labelEn.toLowerCase().includes(search.toLowerCase()) || l.label.includes(search)
   );
 
   return (
@@ -59,20 +57,22 @@ export default function LanguageSelector({ value, onChange }: LanguageSelectorPr
         id="language-selector"
       >
         <span className={styles.triggerIcon}>🌐</span>
-        <span className={styles.triggerLabel}>
-          {selected ? selected.label : 'Language'}
-        </span>
-        <span className={styles.triggerLabelEn}>
-          {selected ? selected.labelEn : ''}
-        </span>
+        <span className={styles.triggerLabel}>{selected ? selected.label : "Language"}</span>
+        <span className={styles.triggerLabelEn}>{selected ? selected.labelEn : ""}</span>
         <svg
-          className={`${styles.chevron} ${isOpen ? styles.chevronOpen : ''}`}
+          className={`${styles.chevron} ${isOpen ? styles.chevronOpen : ""}`}
           width="12"
           height="12"
           viewBox="0 0 12 12"
           fill="none"
         >
-          <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <path
+            d="M3 4.5L6 7.5L9 4.5"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </button>
 
@@ -93,13 +93,13 @@ export default function LanguageSelector({ value, onChange }: LanguageSelectorPr
             {filtered.map((lang) => (
               <li key={lang.tag}>
                 <button
-                  className={`${styles.option} ${lang.tag === value ? styles.optionActive : ''}`}
+                  className={`${styles.option} ${lang.tag === value ? styles.optionActive : ""}`}
                   role="option"
                   aria-selected={lang.tag === value}
                   onClick={() => {
                     onChange(lang.tag);
                     setIsOpen(false);
-                    setSearch('');
+                    setSearch("");
                   }}
                 >
                   <span className={styles.optionLabel}>{lang.label}</span>
@@ -107,9 +107,7 @@ export default function LanguageSelector({ value, onChange }: LanguageSelectorPr
                 </button>
               </li>
             ))}
-            {filtered.length === 0 && (
-              <li className={styles.empty}>No languages found</li>
-            )}
+            {filtered.length === 0 && <li className={styles.empty}>No languages found</li>}
           </ul>
         </div>
       )}

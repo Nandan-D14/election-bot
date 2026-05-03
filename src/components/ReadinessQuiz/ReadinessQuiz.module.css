@@ -23,11 +23,19 @@
 }
 
 @keyframes slideUpFade {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.centerContent, .questionCard, .resultCard {
+.centerContent,
+.questionCard,
+.resultCard {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -62,7 +70,9 @@
   font-size: var(--text-base);
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .btnPrimary:hover {
@@ -132,9 +142,16 @@
 }
 
 /* Results */
-.resultIconSuccess { font-size: 4rem; color: var(--color-success); }
-.resultIconWarning { font-size: 4rem; }
-.resultIconError { font-size: 4rem; }
+.resultIconSuccess {
+  font-size: 4rem;
+  color: var(--color-success);
+}
+.resultIconWarning {
+  font-size: 4rem;
+}
+.resultIconError {
+  font-size: 4rem;
+}
 
 .checklist {
   text-align: left;

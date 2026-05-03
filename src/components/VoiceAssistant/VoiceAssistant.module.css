@@ -31,8 +31,15 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.2); }
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
 }
 
 /* Orb Container */
@@ -71,7 +78,8 @@
 }
 
 @keyframes orbBreathe {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     box-shadow: var(--shadow-md);
   }

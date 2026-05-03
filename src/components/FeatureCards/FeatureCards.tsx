@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
 /* ============================================================
    CivicIQ — Feature Cards
    Landing section showcasing key features with glass cards.
    ============================================================ */
 
-import styles from './FeatureCards.module.css';
+import styles from "./FeatureCards.module.css";
 
 interface Feature {
   icon: string;
@@ -16,32 +16,32 @@ interface Feature {
 
 const FEATURES: Feature[] = [
   {
-    icon: '🎙️',
-    title: 'Voice-First Assistant',
+    icon: "🎙️",
+    title: "Voice-First Assistant",
     description:
-      'Ask questions about the electoral process in your preferred language. Get instant, accurate responses powered by AI.',
-    accentColor: 'rgba(79, 138, 255, 0.15)',
+      "Ask questions about the electoral process in your preferred language. Get instant, accurate responses powered by AI.",
+    accentColor: "rgba(79, 138, 255, 0.15)",
   },
   {
-    icon: '🗳️',
-    title: '3D EVM Simulator',
+    icon: "🗳️",
+    title: "3D EVM Simulator",
     description:
-      'Practice the complete voting process step by step with an interactive EVM and VVPAT simulation.',
-    accentColor: 'rgba(34, 211, 238, 0.15)',
+      "Practice the complete voting process step by step with an interactive EVM and VVPAT simulation.",
+    accentColor: "rgba(34, 211, 238, 0.15)",
   },
   {
-    icon: '🪪',
-    title: 'AI ID Verification',
+    icon: "🪪",
+    title: "AI ID Verification",
     description:
-      'Upload your Voter ID card and let our AI verify its authenticity, extract details, and check for issues.',
-    accentColor: 'rgba(251, 191, 36, 0.15)',
+      "Upload your Voter ID card and let our AI verify its authenticity, extract details, and check for issues.",
+    accentColor: "rgba(251, 191, 36, 0.15)",
   },
   {
-    icon: '🔒',
-    title: 'Politically Neutral',
+    icon: "🔒",
+    title: "Politically Neutral",
     description:
-      'Strictly non-partisan. We only educate about the process — never about parties, candidates, or ideologies.',
-    accentColor: 'rgba(52, 211, 153, 0.15)',
+      "Strictly non-partisan. We only educate about the process — never about parties, candidates, or ideologies.",
+    accentColor: "rgba(52, 211, 153, 0.15)",
   },
 ];
 
@@ -81,8 +81,8 @@ export default function FeatureCards({
           Learn the <span className={styles.heroGradient}>Electoral Process</span> with AI
         </h1>
         <p className={styles.heroSubtitle}>
-          CivicIQ helps you understand voter registration, polling procedures, and the
-          EVM/VVPAT voting process — in your language, with complete political neutrality.
+          CivicIQ helps you understand voter registration, polling procedures, and the EVM/VVPAT
+          voting process — in your language, with complete political neutrality.
         </p>
         <div className={styles.heroActions}>
           <button
@@ -100,7 +100,7 @@ export default function FeatureCards({
             <span>🗳️</span> Try EVM Simulator
           </button>
         </div>
-        
+
         <div className={styles.heroSubActions}>
           <button className={styles.heroTertiary} onClick={onStartQuiz}>
             📋 Check Eligibility
@@ -114,19 +114,34 @@ export default function FeatureCards({
           <button className={styles.heroTertiary} onClick={onStartRules}>
             📜 Voting Rules
           </button>
-          <button className={`${styles.heroTertiary} ${styles.verifyIdButton}`} onClick={onStartVerifyId}>
+          <button
+            className={`${styles.heroTertiary} ${styles.verifyIdButton}`}
+            onClick={onStartVerifyId}
+          >
             🪪 Verify ID
           </button>
-          <button className={`${styles.heroTertiary} ${styles.highlightButton}`} onClick={onStartGames}>
+          <button
+            className={`${styles.heroTertiary} ${styles.highlightButton}`}
+            onClick={onStartGames}
+          >
             🎮 Fun Games
           </button>
-          <button className={`${styles.heroTertiary} ${styles.mapButton}`} onClick={onStartProcessMap}>
+          <button
+            className={`${styles.heroTertiary} ${styles.mapButton}`}
+            onClick={onStartProcessMap}
+          >
             🗺️ Process Map
           </button>
-          <button className={`${styles.heroTertiary} ${styles.mindMapButton}`} onClick={onStartMindMap}>
+          <button
+            className={`${styles.heroTertiary} ${styles.mindMapButton}`}
+            onClick={onStartMindMap}
+          >
             🧠 Mind Map
           </button>
-          <button className={`${styles.heroTertiary} ${styles.profileButton}`} onClick={onStartProfile}>
+          <button
+            className={`${styles.heroTertiary} ${styles.profileButton}`}
+            onClick={onStartProfile}
+          >
             👤 My Profile
           </button>
         </div>
@@ -138,7 +153,7 @@ export default function FeatureCards({
           <div
             key={feature.title}
             className={styles.card}
-            style={{ '--card-accent': feature.accentColor } as React.CSSProperties}
+            style={{ "--card-accent": feature.accentColor } as React.CSSProperties}
           >
             <div className={styles.cardIcon}>{feature.icon}</div>
             <h3 className={styles.cardTitle}>{feature.title}</h3>

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /* ============================================================
    CivicIQ — Voter ID Verification Component
@@ -6,8 +6,8 @@
    Upload front and back images of your voter ID for analysis.
    ============================================================ */
 
-import { useState, useRef, useCallback } from 'react';
-import styles from './IDVerifier.module.css';
+import { useState, useRef, useCallback } from "react";
+import styles from "./IDVerifier.module.css";
 
 interface VerificationDetails {
   name: string | null;
@@ -19,7 +19,7 @@ interface VerificationDetails {
   address: string | null;
   assemblyConstituency: string | null;
   partNumber: string | null;
-  photo: 'present' | 'missing' | 'unclear';
+  photo: "present" | "missing" | "unclear";
 }
 
 interface VerificationCheck {
@@ -29,7 +29,7 @@ interface VerificationCheck {
 }
 
 interface VerificationResult {
-  status: 'VALID' | 'SUSPICIOUS' | 'INVALID' | 'UNREADABLE';
+  status: "VALID" | "SUSPICIOUS" | "INVALID" | "UNREADABLE";
   confidence: number;
   details: VerificationDetails;
   checks: VerificationCheck[];
@@ -53,32 +53,29 @@ export default function IDVerifier({ onVerificationComplete }: IDVerifierProps) 
   const frontInputRef = useRef<HTMLInputElement>(null);
   const backInputRef = useRef<HTMLInputElement>(null);
 
-  const handleImageUpload = useCallback(
-    (file: File, side: 'front' | 'back') => {
-      if (!file.type.startsWith('image/')) {
-        setError('Please upload a valid image file (JPG, PNG, etc.)');
-        return;
-      }
+  const handleImageUpload = useCallback((file: File, side: "front" | "back") => {
+    if (!file.type.startsWith("image/")) {
+      setError("Please upload a valid image file (JPG, PNG, etc.)");
+      return;
+    }
 
-      if (file.size > 10 * 1024 * 1024) {
-        setError('Image file is too large. Please upload an image smaller than 10MB.');
-        return;
-      }
+    if (file.size > 10 * 1024 * 1024) {
+      setError("Image file is too large. Please upload an image smaller than 10MB.");
+      return;
+    }
 
-      setError(null);
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const dataUrl = e.target?.result as string;
-        if (side === 'front') setFrontImage(dataUrl);
-        else setBackImage(dataUrl);
-      };
-      reader.readAsDataURL(file);
-    },
-    []
-  );
+    setError(null);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const dataUrl = e.target?.result as string;
+      if (side === "front") setFrontImage(dataUrl);
+      else setBackImage(dataUrl);
+    };
+    reader.readAsDataURL(file);
+  }, []);
 
   const handleFileChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>, side: 'front' | 'back') => {
+    (e: React.ChangeEvent<HTMLInputElement>, side: "front" | "back") => {
       const file = e.target.files?.[0];
       if (file) handleImageUpload(file, side);
     },
@@ -86,9 +83,9 @@ export default function IDVerifier({ onVerificationComplete }: IDVerifierProps) 
   );
 
   const handleDrop = useCallback(
-    (e: React.DragEvent, side: 'front' | 'back') => {
+    (e: React.DragEvent, side: "front" | "back") => {
       e.preventDefault();
-      if (side === 'front') setDragOverFront(false);
+      if (side === "front") setDragOverFront(false);
       else setDragOverBack(false);
 
       const file = e.dataTransfer.files?.[0];
@@ -97,21 +94,21 @@ export default function IDVerifier({ onVerificationComplete }: IDVerifierProps) 
     [handleImageUpload]
   );
 
-  const handleDragOver = useCallback((e: React.DragEvent, side: 'front' | 'back') => {
+  const handleDragOver = useCallback((e: React.DragEvent, side: "front" | "back") => {
     e.preventDefault();
-    if (side === 'front') setDragOverFront(true);
+    if (side === "front") setDragOverFront(true);
     else setDragOverBack(true);
   }, []);
 
-  const handleDragLeave = useCallback((e: React.DragEvent, side: 'front' | 'back') => {
+  const handleDragLeave = useCallback((e: React.DragEvent, side: "front" | "back") => {
     e.preventDefault();
-    if (side === 'front') setDragOverFront(false);
+    if (side === "front") setDragOverFront(false);
     else setDragOverBack(false);
   }, []);
 
   const handleVerify = useCallback(async () => {
     if (!frontImage) {
-      setError('Please upload the front side of your Voter ID.');
+      setError("Please upload the front side of your Voter ID.");
       return;
     }
 
@@ -120,9 +117,9 @@ export default function IDVerifier({ onVerificationComplete }: IDVerifierProps) 
     setResult(null);
 
     try {
-      const response = await fetch('/api/verify-id', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/verify-id", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           frontImage,
           backImage,
@@ -131,7 +128,7 @@ export default function IDVerifier({ onVerificationComplete }: IDVerifierProps) 
 
       if (!response.ok) {
         const errData = await response.json();
-        throw new Error(errData.error || 'Verification failed');
+        throw new Error(errData.error || "Verification failed");
       }
 
       const data: VerificationResult = await response.json();
@@ -142,7 +139,8 @@ export default function IDVerifier({ onVerificationComplete }: IDVerifierProps) 
         onVerificationComplete();
       }
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : 'Something went wrong. Please try again.';
+      const errorMessage =
+        err instanceof Error ? err.message : "Something went wrong. Please try again.";
       setError(errorMessage);
     } finally {
       setIsVerifying(false);
@@ -158,21 +156,31 @@ export default function IDVerifier({ onVerificationComplete }: IDVerifierProps) 
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'VALID': return '✅';
-      case 'SUSPICIOUS': return '⚠️';
-      case 'INVALID': return '❌';
-      case 'UNREADABLE': return '🔍';
-      default: return '❓';
+      case "VALID":
+        return "✅";
+      case "SUSPICIOUS":
+        return "⚠️";
+      case "INVALID":
+        return "❌";
+      case "UNREADABLE":
+        return "🔍";
+      default:
+        return "❓";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'VALID': return 'var(--color-success)';
-      case 'SUSPICIOUS': return 'var(--color-warning)';
-      case 'INVALID': return 'var(--color-error)';
-      case 'UNREADABLE': return 'var(--color-text-muted)';
-      default: return 'var(--color-text-secondary)';
+      case "VALID":
+        return "var(--color-success)";
+      case "SUSPICIOUS":
+        return "var(--color-warning)";
+      case "INVALID":
+        return "var(--color-error)";
+      case "UNREADABLE":
+        return "var(--color-text-muted)";
+      default:
+        return "var(--color-text-secondary)";
     }
   };
 
@@ -195,21 +203,23 @@ export default function IDVerifier({ onVerificationComplete }: IDVerifierProps) 
           <div className={styles.uploadGrid}>
             {/* Front Side */}
             <div
-              className={`${styles.uploadZone} ${dragOverFront ? styles.uploadZoneDragOver : ''} ${frontImage ? styles.uploadZoneHasImage : ''}`}
-              onDrop={(e) => handleDrop(e, 'front')}
-              onDragOver={(e) => handleDragOver(e, 'front')}
-              onDragLeave={(e) => handleDragLeave(e, 'front')}
+              className={`${styles.uploadZone} ${dragOverFront ? styles.uploadZoneDragOver : ""} ${frontImage ? styles.uploadZoneHasImage : ""}`}
+              onDrop={(e) => handleDrop(e, "front")}
+              onDragOver={(e) => handleDragOver(e, "front")}
+              onDragLeave={(e) => handleDragLeave(e, "front")}
               onClick={() => frontInputRef.current?.click()}
               role="button"
               tabIndex={0}
               aria-label="Upload front side of Voter ID"
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') frontInputRef.current?.click(); }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") frontInputRef.current?.click();
+              }}
             >
               <input
                 ref={frontInputRef}
                 type="file"
                 accept="image/*"
-                onChange={(e) => handleFileChange(e, 'front')}
+                onChange={(e) => handleFileChange(e, "front")}
                 className={styles.hiddenInput}
                 aria-hidden="true"
               />
@@ -233,21 +243,23 @@ export default function IDVerifier({ onVerificationComplete }: IDVerifierProps) 
 
             {/* Back Side */}
             <div
-              className={`${styles.uploadZone} ${dragOverBack ? styles.uploadZoneDragOver : ''} ${backImage ? styles.uploadZoneHasImage : ''}`}
-              onDrop={(e) => handleDrop(e, 'back')}
-              onDragOver={(e) => handleDragOver(e, 'back')}
-              onDragLeave={(e) => handleDragLeave(e, 'back')}
+              className={`${styles.uploadZone} ${dragOverBack ? styles.uploadZoneDragOver : ""} ${backImage ? styles.uploadZoneHasImage : ""}`}
+              onDrop={(e) => handleDrop(e, "back")}
+              onDragOver={(e) => handleDragOver(e, "back")}
+              onDragLeave={(e) => handleDragLeave(e, "back")}
               onClick={() => backInputRef.current?.click()}
               role="button"
               tabIndex={0}
               aria-label="Upload back side of Voter ID"
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') backInputRef.current?.click(); }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") backInputRef.current?.click();
+              }}
             >
               <input
                 ref={backInputRef}
                 type="file"
                 accept="image/*"
-                onChange={(e) => handleFileChange(e, 'back')}
+                onChange={(e) => handleFileChange(e, "back")}
                 className={styles.hiddenInput}
                 aria-hidden="true"
               />
@@ -303,7 +315,10 @@ export default function IDVerifier({ onVerificationComplete }: IDVerifierProps) 
           {/* Privacy Notice */}
           <div className={styles.privacyNotice}>
             <span className={styles.privacyIcon}>🔒</span>
-            <p>Your images are processed securely and are <strong>never stored</strong>. Analysis happens in real-time and data is discarded immediately after.</p>
+            <p>
+              Your images are processed securely and are <strong>never stored</strong>. Analysis
+              happens in real-time and data is discarded immediately after.
+            </p>
           </div>
         </div>
       )}
@@ -320,14 +335,12 @@ export default function IDVerifier({ onVerificationComplete }: IDVerifierProps) 
               <span className={styles.statusIcon}>{getStatusIcon(result.status)}</span>
               <div>
                 <h3 className={styles.statusTitle} style={{ color: getStatusColor(result.status) }}>
-                  {result.status === 'VALID' && 'Voter ID Appears Valid'}
-                  {result.status === 'SUSPICIOUS' && 'Verification Inconclusive'}
-                  {result.status === 'INVALID' && 'Voter ID Appears Invalid'}
-                  {result.status === 'UNREADABLE' && 'Image Could Not Be Read'}
+                  {result.status === "VALID" && "Voter ID Appears Valid"}
+                  {result.status === "SUSPICIOUS" && "Verification Inconclusive"}
+                  {result.status === "INVALID" && "Voter ID Appears Invalid"}
+                  {result.status === "UNREADABLE" && "Image Could Not Be Read"}
                 </h3>
-                <p className={styles.statusConfidence}>
-                  Confidence: {result.confidence}%
-                </p>
+                <p className={styles.statusConfidence}>Confidence: {result.confidence}%</p>
               </div>
             </div>
             <div className={styles.confidenceBar}>
@@ -343,7 +356,7 @@ export default function IDVerifier({ onVerificationComplete }: IDVerifierProps) 
           </div>
 
           {/* Extracted Details */}
-          {result.details && Object.values(result.details).some(v => v !== null) && (
+          {result.details && Object.values(result.details).some((v) => v !== null) && (
             <div className={styles.detailsCard}>
               <h4 className={styles.sectionTitle}>📋 Extracted Details</h4>
               <div className={styles.detailsGrid}>
@@ -356,7 +369,9 @@ export default function IDVerifier({ onVerificationComplete }: IDVerifierProps) 
                 {result.details.epicNumber && (
                   <div className={styles.detailItem}>
                     <span className={styles.detailLabel}>EPIC Number</span>
-                    <span className={`${styles.detailValue} ${styles.mono}`}>{result.details.epicNumber}</span>
+                    <span className={`${styles.detailValue} ${styles.mono}`}>
+                      {result.details.epicNumber}
+                    </span>
                   </div>
                 )}
                 {result.details.fatherOrHusbandName && (
@@ -392,7 +407,9 @@ export default function IDVerifier({ onVerificationComplete }: IDVerifierProps) 
                 {result.details.assemblyConstituency && (
                   <div className={styles.detailItem}>
                     <span className={styles.detailLabel}>Constituency</span>
-                    <span className={styles.detailValue}>{result.details.assemblyConstituency}</span>
+                    <span className={styles.detailValue}>
+                      {result.details.assemblyConstituency}
+                    </span>
                   </div>
                 )}
                 {result.details.partNumber && (
@@ -405,7 +422,11 @@ export default function IDVerifier({ onVerificationComplete }: IDVerifierProps) 
                   <div className={styles.detailItem}>
                     <span className={styles.detailLabel}>Photo</span>
                     <span className={styles.detailValue}>
-                      {result.details.photo === 'present' ? '✅ Present' : result.details.photo === 'missing' ? '❌ Missing' : '🔍 Unclear'}
+                      {result.details.photo === "present"
+                        ? "✅ Present"
+                        : result.details.photo === "missing"
+                          ? "❌ Missing"
+                          : "🔍 Unclear"}
                     </span>
                   </div>
                 )}
@@ -420,9 +441,7 @@ export default function IDVerifier({ onVerificationComplete }: IDVerifierProps) 
               <div className={styles.checksList}>
                 {result.checks.map((check, i) => (
                   <div key={i} className={styles.checkItem}>
-                    <span className={styles.checkIcon}>
-                      {check.passed ? '✅' : '❌'}
-                    </span>
+                    <span className={styles.checkIcon}>{check.passed ? "✅" : "❌"}</span>
                     <div className={styles.checkContent}>
                       <span className={styles.checkName}>{check.check}</span>
                       <span className={styles.checkNote}>{check.note}</span>
@@ -439,7 +458,9 @@ export default function IDVerifier({ onVerificationComplete }: IDVerifierProps) 
               <h4 className={styles.sectionTitle}>⚠️ Warnings</h4>
               <ul className={styles.warningsList}>
                 {result.warnings.map((warning, i) => (
-                  <li key={i} className={styles.warningItem}>{warning}</li>
+                  <li key={i} className={styles.warningItem}>
+                    {warning}
+                  </li>
                 ))}
               </ul>
             </div>
