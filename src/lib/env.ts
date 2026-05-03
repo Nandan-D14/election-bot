@@ -2,7 +2,7 @@ import { z } from "zod";
 
 /**
  * ZERO-TRUST ENVIRONMENT VALIDATOR
- * Prevents the application from starting if environment variables are 
+ * Prevents the application from starting if environment variables are
  * missing or invalid. This is a hallmark of "Senior" production code.
  */
 const envSchema = z.object({
@@ -29,9 +29,9 @@ export function validateEnv() {
     Object.entries(errors).forEach(([key, val]) => {
       console.error(`- ${key}: ${val}`);
     });
-    
+
     throw new Error("Critical: Missing environment variables. Server cannot start.");
   }
-  
+
   return result.data;
 }

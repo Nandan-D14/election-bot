@@ -3,13 +3,13 @@ import traverse from "@babel/traverse";
 
 /**
  * GRANULAR CODE AUDITOR (AST Level)
- * This script "reads" your code like a compiler and validates 
+ * This script "reads" your code like a compiler and validates
  * every single symbol, line, and word for quality.
  */
 export class GranularAuditor {
   static async auditFile(code: string, fileName: string) {
     console.log(`🔍 Deep-Scanning Code Structure: [${fileName}]`);
-    
+
     const ast = parser.parse(code, {
       sourceType: "module",
       plugins: ["typescript", "jsx"],
@@ -59,16 +59,18 @@ export class GranularAuditor {
         if (path.node.typeAnnotation.type === "TSAnyKeyword") {
           metrics.anyTypes++;
         }
-      }
+      },
     });
 
     console.log(`📊 Granular Report for ${fileName}:`);
     console.log(`- Magic Strings (untested words): ${metrics.magicStrings}`);
     console.log(`- Nested 'If' hell: ${metrics.complexConditionals}`);
     console.log(`- TypeScript Type Leaks: ${metrics.anyTypes}`);
-    
+
     if (metrics.anyTypes > 0 || metrics.complexConditionals > 0) {
-      throw new Error("Granular Audit Failed: Code quality does not meet Mission-Critical standards.");
+      throw new Error(
+        "Granular Audit Failed: Code quality does not meet Mission-Critical standards."
+      );
     }
   }
 }

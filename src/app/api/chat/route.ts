@@ -56,7 +56,8 @@ export async function POST(req: Request) {
     const latestMessage = messages[messages.length - 1];
 
     // Resolve model name from allowlist; default to flash
-    const modelName = (requestedModel && ALLOWED_MODELS[requestedModel]) || ALLOWED_MODELS["gemini 3.1 flash"];
+    const modelName =
+      (requestedModel && ALLOWED_MODELS[requestedModel]) || ALLOWED_MODELS["gemini 3.1 flash"];
     const model = genAI.getGenerativeModel({ model: modelName });
 
     const chat = model.startChat({

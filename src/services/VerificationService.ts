@@ -2,8 +2,8 @@ import { z } from "zod";
 
 /**
  * SCHEMA LAYER: The "Contract"
- * Define exactly what valid data looks like. If the API returns 
- * something different, the system catches it immediately before 
+ * Define exactly what valid data looks like. If the API returns
+ * something different, the system catches it immediately before
  * it breaks the UI.
  */
 export const VerificationResultSchema = z.object({
@@ -39,7 +39,7 @@ export interface IVerificationClient {
 /**
  * CORE DOMAIN SERVICE: VerificationService
  * Orchestrates the business logic for voter identity validation.
- * 
+ *
  * DESIGN PRINCIPLES:
  * 1. Single Responsibility: Only handles the verification workflow.
  * 2. Fail-Fast: Validates API responses using Zod before they reach the UI.
@@ -54,7 +54,7 @@ export class VerificationService {
 
   /**
    * Performs high-integrity verification on a voter ID.
-   * 
+   *
    * @param frontImage - The primary identity image.
    * @param backImage - The secondary identity image (optional).
    * @returns A strictly-typed VerificationResult object.

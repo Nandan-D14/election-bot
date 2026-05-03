@@ -1,18 +1,26 @@
 /**
  * 1. ADVANCED PROPERTY-BASED FUZZER
- * This tool generates millions of edge-case permutations (Nulls, Overflows, 
+ * This tool generates millions of edge-case permutations (Nulls, Overflows,
  * Unicode, SQL Injection patterns) to ensure your logic NEVER crashes.
  */
 export class AdvancedFuzzer {
   private static readonly INJECTION_STRINGS = [
-    "' OR '1'='1", "<script>alert(1)</script>", "../../../../etc/passwd",
-    "\u0000", "\uffff", "undefined", "NaN", "[object Object]", "Infinity"
+    "' OR '1'='1",
+    "<script>alert(1)</script>",
+    "../../../../etc/passwd",
+    "\u0000",
+    "\uffff",
+    "undefined",
+    "NaN",
+    "[object Object]",
+    "Infinity",
   ];
 
   static *generatePayloads(count: number) {
     for (let i = 0; i < count; i++) {
       const type = i % 5;
-      if (type === 0) yield this.INJECTION_STRINGS[Math.floor(Math.random() * this.INJECTION_STRINGS.length)];
+      if (type === 0)
+        yield this.INJECTION_STRINGS[Math.floor(Math.random() * this.INJECTION_STRINGS.length)];
       if (type === 1) yield "A".repeat(1024 * 1024); // 1MB String
       if (type === 2) yield Math.random().toString(36);
       if (type === 3) yield "";
@@ -45,11 +53,15 @@ export class AdvancedFuzzer {
 export class RaceConditionTester {
   static async testConcurrency(fn: () => Promise<unknown>, calls: number = 10) {
     console.log(`🏎️  Testing Concurrency (${calls} rapid calls)...`);
-    const results = await Promise.allSettled(Array(calls).fill(0).map(() => fn()));
-    
-    const fulfilled = results.filter(r => r.status === "fulfilled").length;
-    const rejected = results.filter(r => r.status === "rejected").length;
-    
+    const results = await Promise.allSettled(
+      Array(calls)
+        .fill(0)
+        .map(() => fn())
+    );
+
+    const fulfilled = results.filter((r) => r.status === "fulfilled").length;
+    const rejected = results.filter((r) => r.status === "rejected").length;
+
     console.log(`🏁 Concurrency results: ${fulfilled} success, ${rejected} failed.`);
     // In a "Single-Action" system (like Voting), we would assert that ONLY 1 succeeded.
   }
@@ -57,13 +69,13 @@ export class RaceConditionTester {
 
 /**
  * 3. DATA EPHEMERALITY & PRIVACY AUDITOR
- * Ensures that sensitive data (Voter IDs) is PURGED from memory/state 
+ * Ensures that sensitive data (Voter IDs) is PURGED from memory/state
  * after the lifecycle ends.
  */
 export class DataPrivacyAuditor {
   static verifyDataPurge(stateObject: Record<string, unknown>, sensitiveKeys: string[]) {
     console.log("🔒 Auditing Data Ephemerality...");
-    const leaks = sensitiveKeys.filter(key => {
+    const leaks = sensitiveKeys.filter((key) => {
       const val = stateObject[key];
       return val !== null && val !== undefined && val !== "";
     });

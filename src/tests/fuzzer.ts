@@ -8,7 +8,8 @@ import { VerificationService } from "../services/VerificationService";
 
 export class Fuzzer {
   static generateRandomString(length: number) {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;':\",./<>? \n\t";
+    const chars =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;':\",./<>? \n\t";
     let result = "";
     for (let i = 0; i < length; i++) {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -23,8 +24,9 @@ export class Fuzzer {
 
     for (let i = 0; i < iterations; i++) {
       // Create chaotic, potentially malicious input
-      const payload = i % 10 === 0 ? "" : this.generateRandomString(Math.floor(Math.random() * 5000));
-      
+      const payload =
+        i % 10 === 0 ? "" : this.generateRandomString(Math.floor(Math.random() * 5000));
+
       try {
         // We don't care if it fails validation, we care if it CRASHES the process
         await service.performVerification(payload);

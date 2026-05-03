@@ -3,7 +3,7 @@ import { AppError } from "./errorHandler";
 
 /**
  * STANDARDIZED API RESPONSE WRAPPER
- * Every API route in a production-grade app must return 
+ * Every API route in a production-grade app must return
  * the exact same JSON structure to be predictable.
  */
 
@@ -54,6 +54,6 @@ export function errorResponse(error: unknown, status: number = 500) {
     error: { code, message, details },
     timestamp: new Date().toISOString(),
   };
-  
+
   return NextResponse.json(body, { status });
 }

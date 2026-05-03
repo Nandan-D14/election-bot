@@ -10,8 +10,10 @@ export class PCMRecorder {
   constructor(private onChunk: (chunk: Int16Array) => void) {}
 
   async start(): Promise<void> {
-    this.audioContext = new (window.AudioContext ||
-      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)({
+    this.audioContext = new (
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+    )({
       sampleRate: 16000,
     });
 

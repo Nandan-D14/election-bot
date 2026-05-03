@@ -76,10 +76,7 @@ export default function Chatbot() {
     };
 
     // Build full messages payload BEFORE mutating state to avoid stale closure
-    const apiMessages = [
-      ...messages,
-      { role: "user" as const, content: inputValue.trim() },
-    ];
+    const apiMessages = [...messages, { role: "user" as const, content: inputValue.trim() }];
 
     setMessages((prev) => [...prev, userMessage]);
     setInputValue("");

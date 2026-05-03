@@ -6,7 +6,6 @@ import { test, expect } from "@playwright/test";
  */
 
 test.describe("Mission Critical UX Tests", () => {
-  
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
   });
@@ -23,10 +22,12 @@ test.describe("Mission Critical UX Tests", () => {
   // 2. CHAOS ENGINEERING (Network Failure Resilience)
   test("handles Gemini API outage gracefully", async ({ page }) => {
     // Simulate a 500 error from the AI backend
-    await page.route("**/api/chat", route => route.fulfill({
-      status: 500,
-      body: JSON.stringify({ error: "Service Unavailable" }),
-    }));
+    await page.route("**/api/chat", (route) =>
+      route.fulfill({
+        status: 500,
+        body: JSON.stringify({ error: "Service Unavailable" }),
+      })
+    );
 
     await page.locator("#chat-input").fill("Hello");
     await page.keyboard.press("Enter");
@@ -40,14 +41,17 @@ test.describe("Mission Critical UX Tests", () => {
   test("shows loading skeletons on slow 3G", async ({ page, context }) => {
     // Throtle the network to simulate poor connectivity in rural areas
     await context.setOffline(false);
-    await page.context().newCDPSession(page).then(session => {
-      return session.send("Network.emulateNetworkConditions", {
-        offline: false,
-        latency: 2000, // 2 second delay
-        downloadThroughput: 50 * 1024,
-        uploadThroughput: 20 * 1024,
+    await page
+      .context()
+      .newCDPSession(page)
+      .then((session) => {
+        return session.send("Network.emulateNetworkConditions", {
+          offline: false,
+          latency: 2000, // 2 second delay
+          downloadThroughput: 50 * 1024,
+          uploadThroughput: 20 * 1024,
+        });
       });
-    });
 
     await page.locator("#start-quiz-button").click();
     // Verify that "Skeleton" or "Spinner" is visible immediately
@@ -58,13 +62,13 @@ test.describe("Mission Critical UX Tests", () => {
   test("UI elements remain accessible on small mobile (320px)", async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 568 });
     const verifyButton = page.locator("#verify-id-button");
-    
+
     // Ensure button is clickable and not obscured or off-screen
     await expect(verifyButton).toBeVisible();
     await expect(verifyButton).toBeInViewport();
-    
+
     // Check that text doesn't overlap (A common mobile bug)
     const titleHeight = await page.locator("h1").boundingBox();
-    expect(titleHeight?.height).toBeLessThan(100); 
+    expect(titleHeight?.height).toBeLessThan(100);
   });
 });

@@ -43,7 +43,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} ${merriweather.variable}`}>
         {/* Skip to Content for screen readers and keyboard users */}
-        <a href="#main-content" className="skip-link">Skip to Content</a>
+        <a href="#main-content" className="skip-link">
+          Skip to Content
+        </a>
 
         {/* Firebase Analytics */}
         <FirebaseAnalytics />

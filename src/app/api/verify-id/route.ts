@@ -6,7 +6,7 @@ import { validateEnv } from "@/lib/env";
 
 /**
  * ADAPTER PATTERN: Gemini Verification Client
- * Implements the external communication logic without exposing 
+ * Implements the external communication logic without exposing
  * the VerificationService to the underlying GenAI details.
  */
 class GeminiVerificationClient implements IVerificationClient {
@@ -80,7 +80,13 @@ Be thorough but fair.`,
       return {
         status: "UNREADABLE",
         confidence: 0,
-        details: { name: null, epicNumber: null, dateOfBirth: null, address: null, photo: "unclear" },
+        details: {
+          name: null,
+          epicNumber: null,
+          dateOfBirth: null,
+          address: null,
+          photo: "unclear",
+        },
         checks: [],
         warnings: ["AI response could not be parsed into structured format."],
         summary: responseText,
@@ -91,7 +97,7 @@ Be thorough but fair.`,
 
 /**
  * STANDARD API ROUTE
- * Follows enterprise patterns: strict env validation, isolated service logic, 
+ * Follows enterprise patterns: strict env validation, isolated service logic,
  * and predictable standardized response envelopes.
  */
 export async function POST(req: NextRequest) {
@@ -117,10 +123,10 @@ export async function POST(req: NextRequest) {
 
     const client = new GeminiVerificationClient(env.GEMINI_API_KEY);
     const service = new VerificationService(client);
-    
+
     // The performVerification method enforces all Zod schema validation
     const result = await service.performVerification(frontImage, backImage);
-    
+
     return successResponse(result);
   } catch (error: unknown) {
     return errorResponse(error, 400);

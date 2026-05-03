@@ -116,7 +116,10 @@ export default function Home() {
         nav={navProp}
       />
 
-      <main id="main-content" className={`${styles.main} ${isFullscreenView ? styles.mainFullscreen : ""}`}>
+      <main
+        id="main-content"
+        className={`${styles.main} ${isFullscreenView ? styles.mainFullscreen : ""}`}
+      >
         {/* Views */}
         <div className={styles.viewContainer}>
           {activeView === "landing" && (
@@ -244,7 +247,12 @@ export default function Home() {
 }
 
 // Hoisted style objects — avoids re-creating inline objects on every render
-const loadingContainerStyle = { display: "flex", justifyContent: "center", alignItems: "center", height: "400px" } as const;
+const loadingContainerStyle = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "400px",
+} as const;
 const loadingTextStyle = { textAlign: "center" as const };
 const loadingLabelStyle = { fontSize: "1.5rem", color: "var(--color-text-muted)" };
 

@@ -98,10 +98,13 @@ export default function VotingGames() {
     setScores((prev) => [...prev.filter((s) => s.game !== game), { game, score, total }]);
   }, []);
 
-  const scoreMap = scores.reduce((acc, s) => {
-    acc[s.game] = s;
-    return acc;
-  }, {} as Record<string, GameScore>);
+  const scoreMap = scores.reduce(
+    (acc, s) => {
+      acc[s.game] = s;
+      return acc;
+    },
+    {} as Record<string, GameScore>
+  );
 
   const getScore = (game: string) => scoreMap[game];
 
@@ -477,7 +480,7 @@ function EVMChallengeGame({
     { id: 2, name: "Candidate B", symbol: "🚲" },
     { id: 3, name: "Candidate C", symbol: "🐘" },
   ];
-  
+
   // Precompute map to avoid find() in render
   const CANDIDATES_MAP = new Map(CANDIDATES.map((c) => [c.id, c]));
 
@@ -568,7 +571,8 @@ function EVMChallengeGame({
                 <span className={styles.vvpatCheck}>✓</span>
                 <p>Vote Verified!</p>
                 <small>
-                  You voted for: {selectedCandidate ? CANDIDATES_MAP.get(selectedCandidate)?.symbol : ""}
+                  You voted for:{" "}
+                  {selectedCandidate ? CANDIDATES_MAP.get(selectedCandidate)?.symbol : ""}
                 </small>
               </div>
             ) : selectedCandidate ? (

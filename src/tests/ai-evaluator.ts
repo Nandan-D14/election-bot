@@ -64,7 +64,7 @@ export class AIEvaluator {
       console.log(`Testing: ${test.question}`);
       const response = await chatbotFn(test.question);
       const evalResult = await this.evaluateResponse(test.question, response, test.expectedFact);
-      
+
       console.log(`- Score: ${evalResult.score}/5`);
       console.log(`- Reason: ${evalResult.reasoning}`);
       totalScore += evalResult.score;

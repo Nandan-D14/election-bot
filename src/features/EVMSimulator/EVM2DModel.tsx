@@ -87,22 +87,20 @@ export default function EVM2DModel({
       <div className={`${styles.vvpatUnit} ${vvpatVisible ? styles.vvpatActive : ""}`}>
         <div className={styles.unitLabel}>VVPAT</div>
         <div className={styles.vvpatWindow}>
-          {vvpatVisible && selectedCandidate ? (() => {
-            const candidateData = SIMULATED_CANDIDATES.find((c) => c.id === selectedCandidate);
-            return candidateData ? (
-              <div className={styles.vvpatSlip}>
-                <span className={styles.slipSymbol}>
-                  {candidateData.symbol}
-                </span>
-                <span className={styles.slipName}>
-                  {candidateData.label}
-                </span>
-                <div className={styles.slipTimer}>
-                  <div className={styles.slipTimerBar} />
+          {vvpatVisible && selectedCandidate ? (
+            (() => {
+              const candidateData = SIMULATED_CANDIDATES.find((c) => c.id === selectedCandidate);
+              return candidateData ? (
+                <div className={styles.vvpatSlip}>
+                  <span className={styles.slipSymbol}>{candidateData.symbol}</span>
+                  <span className={styles.slipName}>{candidateData.label}</span>
+                  <div className={styles.slipTimer}>
+                    <div className={styles.slipTimerBar} />
+                  </div>
                 </div>
-              </div>
-            ) : null;
-          })() : (
+              ) : null;
+            })()
+          ) : (
             <span className={styles.vvpatEmpty}>—</span>
           )}
         </div>

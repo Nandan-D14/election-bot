@@ -177,10 +177,7 @@ export function useActivityScores() {
     [scores]
   );
 
-  const completedCount = useMemo(
-    () => ACTIVITIES.filter((a) => scores[a.key]).length,
-    [scores]
-  );
+  const completedCount = useMemo(() => ACTIVITIES.filter((a) => scores[a.key]).length, [scores]);
 
   return { scores, markActivity, resetScores, totalPoints, completedCount };
 }

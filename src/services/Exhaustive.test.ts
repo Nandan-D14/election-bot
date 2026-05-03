@@ -8,10 +8,11 @@ import { VerificationService } from "./VerificationService";
  */
 
 test.describe("VerificationService - Exhaustive Branch Coverage", () => {
-  
   test("Line 1: Fails when frontImage is null", async () => {
     const service = new VerificationService({ verify: async () => ({}) });
-    await expect(service.performVerification(null as unknown as string)).rejects.toThrow("required");
+    await expect(service.performVerification(null as unknown as string)).rejects.toThrow(
+      "required"
+    );
   });
 
   test("Line 2: Fails when frontImage is empty string", async () => {
@@ -25,20 +26,28 @@ test.describe("VerificationService - Exhaustive Branch Coverage", () => {
   });
 
   test("Branch: Handles confidence being out of range (Logic Leak)", async () => {
-    const service = new VerificationService({ 
-      verify: async () => ({ status: "VALID", confidence: 150, details: {}, warnings: [], summary: "" }) 
+    const service = new VerificationService({
+      verify: async () => ({
+        status: "VALID",
+        confidence: 150,
+        details: {},
+        warnings: [],
+        summary: "",
+      }),
     });
     // Zod should catch confidence > 100
     await expect(service.performVerification("img")).rejects.toThrow();
   });
 
   test("Word: Validates 'photo' enum strictly", async () => {
-    const service = new VerificationService({ 
-      verify: async () => ({ 
-        status: "VALID", confidence: 90, 
+    const service = new VerificationService({
+      verify: async () => ({
+        status: "VALID",
+        confidence: 90,
         details: { photo: "NOT_A_VALID_STATUS" }, // Testing specific word 'photo'
-        warnings: [], summary: "" 
-      }) 
+        warnings: [],
+        summary: "",
+      }),
     });
     await expect(service.performVerification("img")).rejects.toThrow();
   });
@@ -49,7 +58,7 @@ test.describe("VerificationService - Exhaustive Branch Coverage", () => {
       confidence: 100,
       details: { name: "X", epicNumber: "Y", dateOfBirth: "Z", address: "A", photo: "present" },
       warnings: [],
-      summary: "OK"
+      summary: "OK",
     };
     const service = new VerificationService({ verify: async () => validData });
     const result = await service.performVerification("img");

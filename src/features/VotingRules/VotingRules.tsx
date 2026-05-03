@@ -258,12 +258,8 @@ export default function VotingRules() {
         {/* Rules Display */}
         <div className={styles.rulesPanel}>
           <div className={styles.rulesHeader}>
-            <span className={styles.rulesIcon}>
-              {activeCategoryData?.icon}
-            </span>
-            <h2 className={styles.rulesTitle}>
-              {activeCategoryData?.title}
-            </h2>
+            <span className={styles.rulesIcon}>{activeCategoryData?.icon}</span>
+            <h2 className={styles.rulesTitle}>{activeCategoryData?.title}</h2>
           </div>
 
           <div className={styles.rulesList}>

@@ -108,7 +108,11 @@ export default function FeatureCards({
           <button className={styles.heroTertiary} onClick={onStartMyths} id="start-myths-button">
             🛡️ Myth Buster
           </button>
-          <button className={styles.heroTertiary} onClick={onStartChatbot} id="start-chatbot-button">
+          <button
+            className={styles.heroTertiary}
+            onClick={onStartChatbot}
+            id="start-chatbot-button"
+          >
             🤖 AI Chatbot
           </button>
           <button className={styles.heroTertiary} onClick={onStartRules} id="start-rules-button">

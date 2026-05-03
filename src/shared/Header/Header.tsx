@@ -111,7 +111,10 @@ export default function Header({
                 role="tab"
                 aria-selected={nav.activeView === "assistant"}
               >
-                <span role="img" aria-label="assistant">💬</span> Assistant
+                <span role="img" aria-label="assistant">
+                  💬
+                </span>{" "}
+                Assistant
               </button>
               <button
                 className={`${styles.tab} ${nav.activeView === "simulator" ? styles.tabActive : ""}`}
@@ -120,7 +123,10 @@ export default function Header({
                 role="tab"
                 aria-selected={nav.activeView === "simulator"}
               >
-                <span role="img" aria-label="simulator">🗳️</span> Simulator
+                <span role="img" aria-label="simulator">
+                  🗳️
+                </span>{" "}
+                Simulator
               </button>
               <button
                 className={`${styles.tab} ${nav.activeView === "quiz" ? styles.tabActive : ""}`}
@@ -129,7 +135,10 @@ export default function Header({
                 role="tab"
                 aria-selected={nav.activeView === "quiz"}
               >
-                <span role="img" aria-label="quiz">📋</span> Check Eligibility
+                <span role="img" aria-label="quiz">
+                  📋
+                </span>{" "}
+                Check Eligibility
               </button>
               <button
                 className={`${styles.tab} ${nav.activeView === "myths" ? styles.tabActive : ""}`}
@@ -138,7 +147,10 @@ export default function Header({
                 role="tab"
                 aria-selected={nav.activeView === "myths"}
               >
-                <span role="img" aria-label="myths">🛡️</span> Myth Buster
+                <span role="img" aria-label="myths">
+                  🛡️
+                </span>{" "}
+                Myth Buster
               </button>
               <button
                 className={`${styles.tab} ${nav.activeView === "chatbot" ? styles.tabActive : ""}`}
@@ -147,7 +159,10 @@ export default function Header({
                 role="tab"
                 aria-selected={nav.activeView === "chatbot"}
               >
-                <span role="img" aria-label="chatbot">🤖</span> Chatbot
+                <span role="img" aria-label="chatbot">
+                  🤖
+                </span>{" "}
+                Chatbot
               </button>
               <button
                 className={`${styles.tab} ${nav.activeView === "rules" ? styles.tabActive : ""}`}
@@ -156,7 +171,10 @@ export default function Header({
                 role="tab"
                 aria-selected={nav.activeView === "rules"}
               >
-                <span role="img" aria-label="rules">📜</span> Rules
+                <span role="img" aria-label="rules">
+                  📜
+                </span>{" "}
+                Rules
               </button>
               <button
                 className={`${styles.tab} ${nav.activeView === "verifyid" ? styles.tabActive : ""}`}
@@ -165,7 +183,10 @@ export default function Header({
                 role="tab"
                 aria-selected={nav.activeView === "verifyid"}
               >
-                <span role="img" aria-label="verify id">🪪</span> Verify ID
+                <span role="img" aria-label="verify id">
+                  🪪
+                </span>{" "}
+                Verify ID
               </button>
               <button
                 className={`${styles.tab} ${nav.activeView === "games" ? styles.tabActive : ""}`}
@@ -174,7 +195,10 @@ export default function Header({
                 role="tab"
                 aria-selected={nav.activeView === "games"}
               >
-                <span role="img" aria-label="games">🎮</span> Games
+                <span role="img" aria-label="games">
+                  🎮
+                </span>{" "}
+                Games
               </button>
               <button
                 className={`${styles.tab} ${nav.activeView === "processmap" ? styles.tabActive : ""}`}
@@ -183,7 +207,10 @@ export default function Header({
                 role="tab"
                 aria-selected={nav.activeView === "processmap"}
               >
-                <span role="img" aria-label="process map">🗺️</span> Process
+                <span role="img" aria-label="process map">
+                  🗺️
+                </span>{" "}
+                Process
               </button>
               <button
                 className={`${styles.tab} ${nav.activeView === "mindmap" ? styles.tabActive : ""}`}
@@ -192,7 +219,10 @@ export default function Header({
                 role="tab"
                 aria-selected={nav.activeView === "mindmap"}
               >
-                <span role="img" aria-label="mind map">🧠</span> MindMap
+                <span role="img" aria-label="mind map">
+                  🧠
+                </span>{" "}
+                MindMap
               </button>
               <button
                 className={`${styles.tab} ${nav.activeView === "profile" ? styles.tabActive : ""}`}
@@ -201,7 +231,10 @@ export default function Header({
                 role="tab"
                 aria-selected={nav.activeView === "profile"}
               >
-                <span role="img" aria-label="profile">👤</span> Profile
+                <span role="img" aria-label="profile">
+                  👤
+                </span>{" "}
+                Profile
               </button>
             </div>
           </nav>
